@@ -1,10 +1,10 @@
 <script setup>
 import PrimaryInput from "@/components/ChatComponents/PrimaryInput.vue";
 import MainAIChatView from "./MainAIChatView.vue";
-// import UploadedFilesSection from "@/components/MainAIAgentComponents/UploadedFilesSection.vue";
+import UploadedFilesSection from "./UploadedFilesSection.vue";
 
 import { storeToRefs } from "pinia";
-import { ref, inject, computed } from "vue";
+import { ref, inject, computed, onMounted } from "vue";
 import { useChatbotStore } from "@/stores/chatbot.store";
 
 const chatbotStore = useChatbotStore();
@@ -23,8 +23,57 @@ const uploadedFiles = ref([]);
 const appImages = inject("appImages");
 
 const promptInputPlaceholder = computed(() => {
-  return `Type or say what you need… (e.g., ‘Summarize today’s tasks’)`;
+  return `Type or say what you need… (e.g., 'Summarize today's tasks')`;
 });
+
+// Dummy conversation data for testing
+const dummyConversations = ref([
+  {
+    _id: 1757162514777,
+    role: "user",
+    message: "Hi there! Can you help me with a Vue.js project?",
+    uploadedFiles: []
+  },
+  {
+    _id: 1757162514778,
+    role: "assistant",
+    message: "Hello! I'd be happy to help you with your Vue.js project. What specific aspect would you like assistance with? Whether it's component structure, state management, routing, or any other Vue.js topic, I'm here to help!",
+    thinking: false,
+    isGenerating: false,
+    identifying: false,
+    generatedImages: []
+  },
+  {
+    _id: 1757162514779,
+    role: "user",
+    message: "I'm working on a chat application and need to implement real-time messaging. What's the best approach?",
+    uploadedFiles: []
+  },
+  {
+    _id: 1757162514780,
+    role: "assistant",
+    message: "Great question! For real-time messaging in a Vue.js chat application, here are the most effective approaches:\n\n## WebSocket Solutions\n1. **Socket.io** - Most popular choice with excellent Vue integration\n2. **Native WebSockets** - Lightweight but requires more manual handling\n3. **Server-Sent Events (SSE)** - Good for one-way communication\n\n## Implementation Steps\n1. Set up WebSocket connection in your Vue app\n2. Create a composable for message handling\n3. Implement message state management (Pinia recommended)\n4. Handle connection states and reconnection logic\n\nWould you like me to show you a specific implementation example?",
+    thinking: false,
+    isGenerating: false,
+    identifying: false,
+    generatedImages: []
+  },
+  {
+    _id: 1757162514781,
+    role: "user",
+    message: "Yes, please show me a Socket.io example with Vue 3 and Pinia!",
+    uploadedFiles: []
+  },
+  {
+    _id: 1757162514782,
+    role: "assistant",
+    message: "Perfect! Here's a complete Socket.io implementation with Vue 3 and Pinia:\\n\\n```javascript\\n// stores/chat.store.js\\nimport { defineStore } from 'pinia'\\nimport { io } from 'socket.io-client'\\n\\nexport const useChatStore = defineStore('chat', {\\n  state: () => ({\\n    socket: null,\\n    messages: [],\\n    isConnected: false\\n  }),\\n  \\n  actions: {\\n    initSocket() {\\n      this.socket = io('http://localhost:3001')\\n      \\n      this.socket.on('connect', () => {\\n        this.isConnected = true\\n      })\\n      \\n      this.socket.on('message', (message) => {\\n        this.messages.push(message)\\n      })\\n    }\\n  }\\n})\\n```\\n\\nThis gives you a solid foundation for real-time messaging!",
+    thinking: false,
+    isGenerating: false,
+    identifying: false,
+    generatedImages: []
+  }
+]);
 
 const dropdownSuggestions = computed(() => {
   return [
@@ -133,8 +182,8 @@ function handlePauseResponse() {
     :class="{ inConversation: conversationList?.length }"
   >
     <div class="chat-agent-main-wrapper">
-      <div v-if="conversationList?.length" class="chat-messages-view">
-        <MainAIChatView :chats="conversationList" />
+      <div v-if="conversationList?.length || dummyConversations?.length" class="chat-messages-view">
+        <MainAIChatView :chats="conversationList?.length ? conversationList : dummyConversations" />
       </div>
       <div v-else class="initial-header-wrapper">
         <div class="main-agent-icon">
@@ -186,14 +235,14 @@ function handlePauseResponse() {
   justify-content: center;
   height: 100%;
   width: 100%;
-  padding: 0 1rem;
+  padding: 1rem;
   max-width: 56.25rem;
   transition: all 0.5s ease;
   overflow: auto;
   &.inConversation {
-    padding-right: 0;
+    // padding-right: 0;
     .prompt-input-wrapper {
-      padding-right: 6.25rem;
+      // padding-right: 6.25rem;
     }
   }
   .chat-agent-main-wrapper {

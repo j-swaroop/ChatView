@@ -290,7 +290,7 @@ onMounted(() => {
         <!-- <div v-if="modelValue" class="suggestion-item-wrapper">
           <div class="suggestion-item" :class="{ 'text-input': true }">
             <div class="main-suggestion-text">
-              <img :src="$appImages['suggestionDropdownMessageIcon.svg']" />
+              <img :src="appImages['suggestionDropdownMessageIcon.svg']" />
               <div class="text-wrapper">
                 {{ modelValue }}
                 <transition name="fade">

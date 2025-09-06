@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount } from "vue";
+import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from "vue";
 // import UploadedFilesSection from "./UploadedFilesSection.vue";
 import CustomMarkdown from "../MarkdownComponent/CustomMarkdown.vue";
 import SentMessageMarkdown from "../MarkdownComponent/SentMessageMarkdown.vue";
@@ -10,6 +10,8 @@ const props = defineProps({
     default: () => [],
   },
 });
+
+const appImages = inject("appImages");
 
 const { chats } = toRefs(props);
 
@@ -94,19 +96,17 @@ const getImageProcessingTimeText = computed(() => {
       :id="chat._id"
     >
       <div v-if="chat.role === 'assistant'" class="agent-icon">
-        <img :src="$appImages['aiAssistant.svg']" />
+        <img :src="appImages['aiAssistantLogo.svg']" />
       </div>
       <div class="message-content">
         <div
-          v-if="chat?.identifying || chat?.finding || chat?.thinking"
+          v-if="chat?.identifying || chat?.thinking"
           class="thinking-text-wrapper"
         >
           <div class="thinking-text">
             {{
               chat?.identifying
                 ? "Identifying..."
-                : chat?.finding
-                ? "Searching for the best matches..."
                 : chat?.thinking
                 ? getThinkingText
                 : ""
@@ -179,12 +179,12 @@ const getImageProcessingTimeText = computed(() => {
   overflow: auto;
   overflow-x: hidden;
   padding: 1rem 0;
-  padding-right: 6.25rem;
+  // padding-right: 6.25rem;
   gap: 1rem;
   scroll-behavior: smooth;
 
   &.bottomSpacing {
-    padding-bottom: 58vh;
+    // padding-bottom: 58vh;
   }
 
   .message-container {
@@ -250,11 +250,11 @@ const getImageProcessingTimeText = computed(() => {
         .thinking-text {
           background: linear-gradient(
             100deg,
-            #f37d57 0%,
-            rgba(243, 125, 87, 0) 25%,
-            #f37d57 50%,
-            rgba(243, 125, 87, 0) 75%,
-            #f37d57 100%
+            #3B82F6 0%,
+            rgba(59, 130, 246, 0) 25%,
+            #3B82F6 50%,
+            rgba(59, 130, 246, 0) 75%,
+            #3B82F6 100%
           );
           background-size: 400% auto;
           background-clip: text;

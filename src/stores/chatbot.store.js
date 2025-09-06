@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { nextTick } from 'vue';
 
-export const useChatbotStore = defineStore('chatbot', {
+export const useChatbotStore = defineStore('chatBotStore', {
   state: () => ({
     isPrimaryTextareaFocused: false,
     currentConversationId: '1243',
@@ -126,9 +126,9 @@ export const useChatbotStore = defineStore('chatbot', {
         thinking: true,
         isGenerating: true,
         identifying: false,
-        finding: false,
+        // finding: false,
         generatedImages: [],
-        shoppingList: [],
+        // shoppingList: [],
       });
 
       // ✅ Use reusable system prompt creator
@@ -228,12 +228,13 @@ export const useChatbotStore = defineStore('chatbot', {
             lastMessage.identifying = true;
           }
 
-          if (data['tool_name'] === 'search_products') {
-            lastMessage.finding = true;
-          }
           if (data['tool_name'] === 'image_search') {
             lastMessage.analyzing = true;
           }
+
+          // if (data['tool_name'] === 'search_products') {
+          //   lastMessage.finding = true;
+          // }
           break;
         case 'tool_ended':
           if (imageGenerationTypes.includes(data['tool_name'])) {
@@ -262,36 +263,36 @@ export const useChatbotStore = defineStore('chatbot', {
           }
 
           //Shop flow
-          if (data['tool_name'] === 'search_products' && data['output']) {
-            console.log('getting searched products from the websites');
-            let otherWebsitesResponse = Array.isArray(data?.output?.search_other_websites_response)
-              ? data.output.search_other_websites_response
-              : [];
+          // if (data['tool_name'] === 'search_products' && data['output']) {
+          //   console.log('getting searched products from the websites');
+          //   let otherWebsitesResponse = Array.isArray(data?.output?.search_other_websites_response)
+          //     ? data.output.search_other_websites_response
+          //     : [];
 
-            let prefferedWebsitesResponse = Array.isArray(data?.output?.search_preferred_websites_response)
-              ? data.output.search_preferred_websites_response
-              : [];
+          //   let prefferedWebsitesResponse = Array.isArray(data?.output?.search_preferred_websites_response)
+          //     ? data.output.search_preferred_websites_response
+          //     : [];
 
-            let localResponse = Array.isArray(data?.output?.search_local_catalog_response)
-              ? data.output.search_local_catalog_response
-              : [];
+          //   let localResponse = Array.isArray(data?.output?.search_local_catalog_response)
+          //     ? data.output.search_local_catalog_response
+          //     : [];
 
-            lastMessage.shoppingList = [
-              ...localResponse.map((p) => ({
-                ...p,
-                isLocal: true,
-              })),
-              ...prefferedWebsitesResponse.map((p) => ({
-                ...p,
-                isPreffered: true,
-              })),
-              ...otherWebsitesResponse.map((p) => ({
-                ...p,
-                isOther: true,
-              })),
-            ];
-            lastMessage.finding = false;
-          }
+          //   lastMessage.shoppingList = [
+          //     ...localResponse.map((p) => ({
+          //       ...p,
+          //       isLocal: true,
+          //     })),
+          //     ...prefferedWebsitesResponse.map((p) => ({
+          //       ...p,
+          //       isPreffered: true,
+          //     })),
+          //     ...otherWebsitesResponse.map((p) => ({
+          //       ...p,
+          //       isOther: true,
+          //     })),
+          //   ];
+          //   lastMessage.finding = false;
+          // }
 
           //resets
 

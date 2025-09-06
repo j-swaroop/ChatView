@@ -23,5 +23,20 @@ export default defineConfig({
   server: {
     host: true
   },
-  base: './'
+  base: './',
+  // Optional: Optimize highlight.js bundle size by pre-bundling
+  optimizeDeps: {
+    include: ['highlight.js', 'markdown-it']
+  },
+  // Optional: Configure build optimizations
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'markdown': ['markdown-it', 'highlight.js']
+        }
+      }
+    }
+  }
+  
 })

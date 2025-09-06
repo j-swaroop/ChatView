@@ -30,10 +30,10 @@ function handleRemoveUploadedFile(index) {
           @click="handleRemoveUploadedFile(index)"
           class="cross-icon"
         >
-          <img :src="$appImages['crossIcon3.svg']" />
+          <!-- <img :src="$appImages['crossIcon3.svg']" /> -->
         </div>
         <div class="file-preview">
-          <img :src="file?.preview || $appImages[file?.icon]" />
+          <!-- <img :src="file?.preview || $appImages[file?.icon]" /> -->
         </div>
         <div v-show="!file?.fileType?.startsWith('image')" class="file-detail">
           <div class="file-name">{{ file?.fileName }}</div>
