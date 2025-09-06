@@ -1,0 +1,30 @@
+* {
+  font-family: $unbounded-font;
+}
+
+@media only screen and (max-width: 820px) {
+  // This will handle every screen thats mobile
+  html {
+    font-size: 100%;
+  }
+}
+@media only screen and (min-width: 821px) {
+  html {
+    font-size: 60%;
+  }
+}
+@media only screen and (min-width: 900px) {
+  html {
+    font-size: 70%;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  html {
+    font-size: 80%;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  html {
+    font-size: 100%;
+  }
+}
