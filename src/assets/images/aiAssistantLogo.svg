@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 30 30" fill="none">
+  <defs>
+    <radialGradient id="blueGradient" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#A5B4FC"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </radialGradient>
+    <linearGradient id="blueGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DBEAFE" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#93C5FD" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.2"/>
+    </linearGradient>
+    
+    <!-- New Box-shadow filter for soft glow expansion -->
+    <filter id="boxShadowGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feOffset dx="4" dy="4" result="offsetBlur"/>
+      <feColorMatrix in="offsetBlur" type="matrix" values="0 0 0 0 0.6  0 0.5 1 0 0  0 0 1 0 0  0 0 0 0.6 0" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+  </defs>
+  
+  <!-- Outer glow effect with expanding/reducing animation (box-shadow-like) -->
+  <circle cx="15" cy="15" r="10" fill="url(#blueGlow)" opacity="0.3" filter="url(#boxShadowGlow)">
+    <animate attributeName="r" values="10;18;10" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Secondary glow layer -->
+  <circle cx="15" cy="15" r="8" fill="url(#blueGlow)" opacity="0.2" filter="url(#boxShadowGlow)">
+    <animate attributeName="r" values="8;16;8" dur="4s" repeatCount="indefinite" begin="0.5s"/>
+    <animate attributeName="opacity" values="0.2;0.5;0.2" dur="4s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+  
+  <!-- Third glow layer -->
+  <circle cx="15" cy="15" r="6" fill="url(#blueGlow)" opacity="0.1" filter="url(#boxShadowGlow)">
+    <animate attributeName="r" values="6;14;6" dur="4s" repeatCount="indefinite" begin="1s"/>
+    <animate attributeName="opacity" values="0.1;0.3;0.1" dur="4s" repeatCount="indefinite" begin="1s"/>
+  </circle>
+  
+  <!-- Main circle with gradient -->
+  <circle cx="15" cy="15" r="11" fill="url(#blueGradient)" stroke="#3B82F6" stroke-width="1">
+    <animateTransform attributeName="transform" type="rotate" values="0 15 15;360 15 15" dur="8s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Inner circle -->
+  <circle cx="15" cy="15" r="8" fill="#A5B4FC"/>
+  
+  <!-- Eyes with blink animation -->
+  <circle cx="12" cy="12" r="1.5" fill="white">
+    <animate attributeName="r" values="1.5;0;1.5" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="18" cy="12" r="1.5" fill="white">
+    <animate attributeName="r" values="1.5;0;1.5" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Eye highlights -->
+  <circle cx="12.3" cy="11.7" r="0.5" fill="#E0F2FE"/>
+  <circle cx="18.3" cy="11.7" r="0.5" fill="#E0F2FE"/>
+  
+  <!-- Smile with wave animation -->
+  <path d="M10 18 Q15 22 20 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="round">
+    <animate attributeName="d" 
+             values="M10 18 Q15 22 20 18;M10 18 Q15 20 20 18;M10 18 Q15 22 20 18" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+</svg>

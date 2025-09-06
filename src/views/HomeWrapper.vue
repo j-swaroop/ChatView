@@ -1,13 +1,10 @@
 <script setup>
-import { inject } from 'vue';
-
-const rem = inject('remToPixel');
-
+import ChatViewWrapper from '@/components/ChatComponents/ChatViewWrapper.vue';
 </script>
 
 <template>
   <div class="home-page-wrapper">
-    {{ rem }}
+    <ChatViewWrapper />
   </div>
 </template>
 
@@ -15,8 +12,10 @@ const rem = inject('remToPixel');
 .home-page-wrapper {
   height: 100%;
   width: 100%;
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  color: $color-red;
+  background: #f9f9f9;
 }
 </style>
