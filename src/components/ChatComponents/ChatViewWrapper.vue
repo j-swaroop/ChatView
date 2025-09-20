@@ -1,26 +1,22 @@
 <script setup>
-import PrimaryInput from "@/components/ChatComponents/PrimaryInput.vue";
-import MainAIChatView from "./MainAIChatView.vue";
-import UploadedFilesSection from "./UploadedFilesSection.vue";
+import PrimaryInput from '@/components/ChatComponents/PrimaryInput.vue';
+import MainAIChatView from './MainAIChatView.vue';
+import UploadedFilesSection from './UploadedFilesSection.vue';
 
-import { storeToRefs } from "pinia";
-import { ref, inject, computed, onMounted } from "vue";
-import { useChatbotStore } from "@/stores/chatbot.store";
+import { storeToRefs } from 'pinia';
+import { ref, inject, computed, onMounted } from 'vue';
+import { useChatbotStore } from '@/stores/chatbot.store';
 
 const chatbotStore = useChatbotStore();
 
-const {
-  currentConversationId,
-  conversationList,
-  isStreamingGenerationInProgress,
-  currentStreamAbortController,
-} = storeToRefs(chatbotStore);
+const { currentConversationId, conversationList, isStreamingGenerationInProgress, currentStreamAbortController } =
+  storeToRefs(chatbotStore);
 
 const { convertAndResizeImageToBase64, startAiAgentResponseStreaming } = chatbotStore;
 
-const messageInput = ref("");
+const messageInput = ref('');
 const uploadedFiles = ref([]);
-const appImages = inject("appImages");
+const appImages = inject('appImages');
 
 const promptInputPlaceholder = computed(() => {
   return `Type or say what you need… (e.g., 'Summarize today's tasks')`;
@@ -28,78 +24,77 @@ const promptInputPlaceholder = computed(() => {
 
 // Dummy conversation data for testing
 const dummyConversations = ref([
-  {
-    _id: 1757162514777,
-    role: "user",
-    message: "Hi there! Can you help me with a Vue.js project?",
-    uploadedFiles: []
-  },
-  {
-    _id: 1757162514778,
-    role: "assistant",
-    message: "Hello! I'd be happy to help you with your Vue.js project. What specific aspect would you like assistance with? Whether it's component structure, state management, routing, or any other Vue.js topic, I'm here to help!",
-    thinking: false,
-    isGenerating: false,
-    identifying: false,
-    generatedImages: []
-  },
-  {
-    _id: 1757162514779,
-    role: "user",
-    message: "I'm working on a chat application and need to implement real-time messaging. What's the best approach?",
-    uploadedFiles: []
-  },
-  {
-    _id: 1757162514780,
-    role: "assistant",
-    message: "Great question! For real-time messaging in a Vue.js chat application, here are the most effective approaches:\n\n## WebSocket Solutions\n1. **Socket.io** - Most popular choice with excellent Vue integration\n2. **Native WebSockets** - Lightweight but requires more manual handling\n3. **Server-Sent Events (SSE)** - Good for one-way communication\n\n## Implementation Steps\n1. Set up WebSocket connection in your Vue app\n2. Create a composable for message handling\n3. Implement message state management (Pinia recommended)\n4. Handle connection states and reconnection logic\n\nWould you like me to show you a specific implementation example?",
-    thinking: false,
-    isGenerating: false,
-    identifying: false,
-    generatedImages: []
-  },
-  {
-    _id: 1757162514781,
-    role: "user",
-    message: "Yes, please show me a Socket.io example with Vue 3 and Pinia!",
-    uploadedFiles: []
-  },
-  {
-    _id: 1757162514782,
-    role: "assistant",
-    message: "Perfect! Here's a complete Socket.io implementation with Vue 3 and Pinia:\\n\\n```javascript\\n// stores/chat.store.js\\nimport { defineStore } from 'pinia'\\nimport { io } from 'socket.io-client'\\n\\nexport const useChatStore = defineStore('chat', {\\n  state: () => ({\\n    socket: null,\\n    messages: [],\\n    isConnected: false\\n  }),\\n  \\n  actions: {\\n    initSocket() {\\n      this.socket = io('http://localhost:3001')\\n      \\n      this.socket.on('connect', () => {\\n        this.isConnected = true\\n      })\\n      \\n      this.socket.on('message', (message) => {\\n        this.messages.push(message)\\n      })\\n    }\\n  }\\n})\\n```\\n\\nThis gives you a solid foundation for real-time messaging!",
-    thinking: false,
-    isGenerating: false,
-    identifying: false,
-    generatedImages: []
-  }
+  //   {
+  //     _id: 1757162514777,
+  //     role: "user",
+  //     message: "Hi there! Can you help me with a Vue.js project?",
+  //     uploadedFiles: []
+  //   },
+  //   {
+  //     _id: 1757162514778,
+  //     role: "assistant",
+  //     message: "Hello! I'd be happy to help you with your Vue.js project. What specific aspect would you like assistance with? Whether it's component structure, state management, routing, or any other Vue.js topic, I'm here to help!",
+  //     thinking: false,
+  //     isGenerating: false,
+  //     identifying: false,
+  //     generatedImages: []
+  //   },
+  //   {
+  //     _id: 1757162514779,
+  //     role: "user",
+  //     message: "I'm working on a chat application and need to implement real-time messaging. What's the best approach?",
+  //     uploadedFiles: []
+  //   },
+  //   {
+  //     _id: 1757162514780,
+  //     role: "assistant",
+  //     message: "Great question! For real-time messaging in a Vue.js chat application, here are the most effective approaches:\n\n## WebSocket Solutions\n1. **Socket.io** - Most popular choice with excellent Vue integration\n2. **Native WebSockets** - Lightweight but requires more manual handling\n3. **Server-Sent Events (SSE)** - Good for one-way communication\n\n## Implementation Steps\n1. Set up WebSocket connection in your Vue app\n2. Create a composable for message handling\n3. Implement message state management (Pinia recommended)\n4. Handle connection states and reconnection logic\n\nWould you like me to show you a specific implementation example?",
+  //     thinking: false,
+  //     isGenerating: false,
+  //     identifying: false,
+  //     generatedImages: []
+  //   },
+  //   {
+  //     _id: 1757162514781,
+  //     role: "user",
+  //     message: "Yes, please show me a Socket.io example with Vue 3 and Pinia!",
+  //     uploadedFiles: []
+  //   },
+  //   {
+  //     _id: 1757162514782,
+  //     role: "assistant",
+  //     message: "Perfect! Here's a complete Socket.io implementation with Vue 3 and Pinia:\\n\\n```javascript\\n// stores/chat.store.js\\nimport { defineStore } from 'pinia'\\nimport { io } from 'socket.io-client'\\n\\nexport const useChatStore = defineStore('chat', {\\n  state: () => ({\\n    socket: null,\\n    messages: [],\\n    isConnected: false\\n  }),\\n  \\n  actions: {\\n    initSocket() {\\n      this.socket = io('http://localhost:3001')\\n      \\n      this.socket.on('connect', () => {\\n        this.isConnected = true\\n      })\\n      \\n      this.socket.on('message', (message) => {\\n        this.messages.push(message)\\n      })\\n    }\\n  }\\n})\\n```\\n\\nThis gives you a solid foundation for real-time messaging!",
+  //     thinking: false,
+  //     isGenerating: false,
+  //     identifying: false,
+  //     generatedImages: []
+  //   }
 ]);
 
 const dropdownSuggestions = computed(() => {
   return [
-    "Help me write a professional email",
-    "Create a project timeline for my team",
-    "Generate ideas for a presentation",
-    "Summarize the latest industry trends",
-    "Draft a meeting agenda",
-    "Write a code review checklist",
-    "Create a budget breakdown",
-    "Plan a team building activity",
-    "Generate creative content ideas",
+    'Help me write a professional email',
+    'Create a project timeline for my team',
+    'Generate ideas for a presentation',
+    'Summarize the latest industry trends',
+    'Draft a meeting agenda',
+    'Write a code review checklist',
+    'Create a budget breakdown',
+    'Plan a team building activity',
+    'Generate creative content ideas',
   ].filter((item) => {
     return item.toLowerCase().includes(messageInput.value.toLowerCase());
   });
 });
 
-
 async function handleFilesSelected(files) {
   const filesArray = [...files];
-  console.log(filesArray, "files array");
+  console.log(filesArray, 'files array');
 
   // Step 1: convert/resize images before preparing previews
   const processedFiles = await Promise.all(
     filesArray.map(async (file) => {
-      if (file.type.startsWith("image/")) {
+      if (file.type.startsWith('image/')) {
         // ✅ Convert & resize image, return {file, base64}
         return await convertAndResizeImageToBase64(file);
       }
@@ -109,19 +104,17 @@ async function handleFilesSelected(files) {
   );
 
   // Step 2: prepare previews
-  const previews = processedFiles.map(
-    ({ file, base64, isImage, originalName }) => ({
-      _id: crypto.randomUUID(),
-      preview: base64, // base64 only for images
-      type: isImage ? "png" : file.type.split("/")[1] || "unknown", // keep real extension for non-images
-      fileType: file.type,
-      url: null,
-      file,
-      fileName: file.name,
-      // icon: getFileIconByFileType(file.type),
-      // icon: "file-icon",
-    })
-  );
+  const previews = processedFiles.map(({ file, base64, isImage, originalName }) => ({
+    _id: crypto.randomUUID(),
+    preview: base64, // base64 only for images
+    type: isImage ? 'png' : file.type.split('/')[1] || 'unknown', // keep real extension for non-images
+    fileType: file.type,
+    url: null,
+    file,
+    fileName: file.name,
+    // icon: getFileIconByFileType(file.type),
+    // icon: "file-icon",
+  }));
 
   uploadedFiles.value.push(...previews);
 
@@ -142,7 +135,7 @@ async function handleFilesSelected(files) {
   //   item.url = signedUrls[idx];
   // });
 
-  console.log(uploadedFiles.value, "✅ final file objects");
+  console.log(uploadedFiles.value, '✅ final file objects');
 }
 
 function handleRemoveUploadedFile(index) {
@@ -158,29 +151,24 @@ function handleSubmitMessage(message) {
     message: msg,
     uploadedFiles: filesToSend,
   });
-  
-  console.log("Message submitted:", msg, "Files:", filesToSend);
+
+  console.log('Message submitted:', msg, 'Files:', filesToSend);
 
   uploadedFiles.value = [];
-  messageInput.value = "";
+  messageInput.value = '';
 }
 
 function handlePauseResponse() {
   currentStreamAbortController.value?.abort();
-  const lastMessage =
-    conversationList.value[conversationList.value.length - 1];
+  const lastMessage = conversationList.value[conversationList.value.length - 1];
   lastMessage.isGenerating = false;
   lastMessage.thinking = false;
-  
-  console.log("Pause response requested");
 }
 </script>
 
 <template>
-  <div
-    class="chat-component-middle-section-wrapper"
-    :class="{ inConversation: conversationList?.length }"
-  >
+  <div class="chat-component-middle-section-wrapper">
+    <!-- :class="{ inConversation: conversationList?.length }" -->
     <div class="chat-agent-main-wrapper">
       <div v-if="conversationList?.length || dummyConversations?.length" class="chat-messages-view">
         <MainAIChatView :chats="conversationList?.length ? conversationList : dummyConversations" />
@@ -189,12 +177,8 @@ function handlePauseResponse() {
         <div class="main-agent-icon">
           <img :src="appImages['aiAssistantLogo.svg']" class="ai-logo-img" />
         </div>
-        <div class="agent-greet-title">
-          Hey Bro!
-        </div>
-        <div class="agent-greet-subtitle">
-          What do you want to do today?
-        </div>
+        <div class="agent-greet-title">Hey Bro!</div>
+        <div class="agent-greet-subtitle">What do you want to do today?</div>
       </div>
       <div class="prompt-input-wrapper">
         <transition name="uploaded-files-transition">
@@ -222,7 +206,6 @@ function handlePauseResponse() {
           v-model="messageInput"
         />
       </div>
-
     </div>
   </div>
 </template>
@@ -325,7 +308,10 @@ function handlePauseResponse() {
 
 .uploaded-files-transition-enter-active,
 .uploaded-files-transition-leave-active {
-  transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+  transition:
+    max-height 0.5s ease,
+    opacity 0.3s ease,
+    margin 0.3s ease;
 }
 
 .uploaded-files-transition-enter-from,

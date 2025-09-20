@@ -1,8 +1,8 @@
 <script setup>
-import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from "vue";
+import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 'vue';
 // import UploadedFilesSection from "./UploadedFilesSection.vue";
-import CustomMarkdown from "../MarkdownComponent/CustomMarkdown.vue";
-import SentMessageMarkdown from "../MarkdownComponent/SentMessageMarkdown.vue";
+import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
+import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
 
 const props = defineProps({
   chats: {
@@ -11,7 +11,7 @@ const props = defineProps({
   },
 });
 
-const appImages = inject("appImages");
+const appImages = inject('appImages');
 
 const { chats } = toRefs(props);
 
@@ -25,9 +25,7 @@ let intervalId = null;
 let startTime = null;
 
 const hasLoadingBlocks = computed(() => {
-  return chats.value?.some((chat) =>
-    chat?.generatedImages?.some((item) => item.isSkeleton)
-  );
+  return chats.value?.some((chat) => chat?.generatedImages?.some((item) => item.isSkeleton));
 });
 
 watch(
@@ -62,31 +60,25 @@ onBeforeUnmount(() => {
 
 const getThinkingText = computed(() => {
   if (elapsedTime.value < 10) {
-    return "AlterSquare ai thinking...";
+    return 'AlterSquare ai thinking...';
   } else if (elapsedTime.value < 25) {
-    return "Processing the image...";
+    return 'Processing the image...';
   } else if (elapsedTime.value < 50) {
-    return "Generating the image...";
+    return 'Generating the image...';
   } else {
-    return "Almost there...";
+    return 'Almost there...';
   }
 });
 
 const getImageProcessingTimeText = computed(() => {
-  return elapsed.value >= 60
-    ? "Almost there.."
-    : `${elapsed.value.toFixed(1)}/60s`;
+  return elapsed.value >= 60 ? 'Almost there..' : `${elapsed.value.toFixed(1)}/60s`;
 });
 
 //--------------------------------------------------------------------------------------------
 </script>
 
 <template>
-  <div
-    class="main-ai-chat-view-wrapper"
-    ref="chatWrapperRef"
-    :class="{ bottomSpacing: chats.length > 2 }"
-  >
+  <div class="main-ai-chat-view-wrapper" ref="chatWrapperRef" :class="{ bottomSpacing: chats.length > 2 }">
     <div
       v-for="(chat, index) in chats"
       :key="chat.id"
@@ -99,33 +91,21 @@ const getImageProcessingTimeText = computed(() => {
         <img :src="appImages['aiAssistantLogo.svg']" />
       </div>
       <div class="message-content">
-        <div
-          v-if="chat?.identifying || chat?.thinking"
-          class="thinking-text-wrapper"
-        >
+        <div v-if="chat?.identifying || chat?.thinking" class="thinking-text-wrapper">
           <div class="thinking-text">
-            {{
-              chat?.identifying
-                ? "Identifying..."
-                : chat?.thinking
-                ? getThinkingText
-                : ""
-            }}
+            {{ chat?.identifying ? 'Identifying...' : chat?.thinking ? getThinkingText : '' }}
           </div>
         </div>
 
         <div v-if="chat?.error" class="error-message">
-          {{ "Failed to generate response. Please try again." }}
+          {{ 'Failed to generate response. Please try again.' }}
         </div>
         <!-- <UploadedFilesSection
           v-if="chat?.uploadedFiles?.length"
           :uploaded-files="chat?.uploadedFiles"
           :hide-remove-file-icon="true"
         /> -->
-        <div
-          v-if="chat?.generatedImages?.length"
-          class="generated-images-wrapper"
-        >
+        <div v-if="chat?.generatedImages?.length" class="generated-images-wrapper">
           <div class="generated-images">
             <div
               v-for="image in chat.generatedImages"
@@ -157,7 +137,7 @@ const getImageProcessingTimeText = computed(() => {
         </div>
         <div v-if="chat?.analyzing" class="thinking-text-wrapper">
           <div class="thinking-text">
-            {{ "Analyzing this image..." }}
+            {{ 'Analyzing this image...' }}
           </div>
         </div>
       </div>
@@ -250,11 +230,11 @@ const getImageProcessingTimeText = computed(() => {
         .thinking-text {
           background: linear-gradient(
             100deg,
-            #3B82F6 0%,
+            #3b82f6 0%,
             rgba(59, 130, 246, 0) 25%,
-            #3B82F6 50%,
+            #3b82f6 50%,
             rgba(59, 130, 246, 0) 75%,
-            #3B82F6 100%
+            #3b82f6 100%
           );
           background-size: 400% auto;
           background-clip: text;
@@ -346,7 +326,6 @@ const getImageProcessingTimeText = computed(() => {
           }
         }
       }
-
 
       .text-message {
         display: inline-block; // ✅ keeps width independent of other siblings

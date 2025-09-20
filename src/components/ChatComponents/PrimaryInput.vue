@@ -132,7 +132,7 @@ function handleSubmitMessage() {
   emit('submit:message', props.modelValue);
   emit('update:modelValue', '');
   if (textareaRef.value) {
-    textareaRef.value.style.height = '80px';
+    textareaRef.value.style.height = '1.875rem';
   }
 }
 
@@ -359,7 +359,7 @@ onMounted(() => {
   backdrop-filter: blur(50px);
   transition: border-color 0.5s ease;
   &:focus-within {
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
   .prompt-input-area {
     width: 100%;
@@ -424,7 +424,7 @@ onMounted(() => {
         justify-content: center;
         gap: 0.25rem;
         border-radius: 6.25rem;
-        background: var(--blue-500, #3B82F6);
+        background: var(--blue-500, #3b82f6);
         transition: all 0.25s ease-in;
         cursor: pointer;
         &.pause {
@@ -437,7 +437,7 @@ onMounted(() => {
           cursor: not-allowed;
         }
         &:hover {
-          background: #2563EB;
+          background: #2563eb;
         }
         img {
           width: 1rem;
@@ -445,7 +445,7 @@ onMounted(() => {
           flex-shrink: 0;
         }
         .primary-action-btn-text {
-          color: var(--blue-100, #DBEAFE);
+          color: var(--blue-100, #dbeafe);
           text-align: center;
           font-size: 1rem;
           font-style: normal;
@@ -485,24 +485,24 @@ onMounted(() => {
         padding: 0.75rem;
         transition: all 0.25s ease;
         &:hover {
-          background: #DBEAFE;
+          background: #dbeafe;
           .main-suggestion-text {
             img {
               filter: brightness(0);
             }
             .text-wrapper {
-              color: var(--blue-600, #2563EB);
+              color: var(--blue-600, #2563eb);
             }
           }
         }
         &.highlighted {
-          background: #DBEAFE;
+          background: #dbeafe;
           .main-suggestion-text {
             img {
               filter: brightness(0);
             }
             .text-wrapper {
-              color: var(--blue-600, #2563EB);
+              color: var(--blue-600, #2563eb);
             }
           }
         }
@@ -514,8 +514,8 @@ onMounted(() => {
           align-items: center;
           gap: 0.625rem;
           border-radius: 0.25rem;
-          background: var(--blue-50, #EFF6FF);
-          color: var(--blue-600, #2563EB);
+          background: var(--blue-50, #eff6ff);
+          color: var(--blue-600, #2563eb);
           text-align: center;
           font-size: 0.75rem;
           font-style: normal;
@@ -546,7 +546,7 @@ onMounted(() => {
             gap: 1px;
             transition: all 0.25s ease;
             .fake-caret {
-              color: var(--blue-600, #2563EB);
+              color: var(--blue-600, #2563eb);
               text-align: center;
               font-size: 1rem;
               font-style: normal;
@@ -559,7 +559,7 @@ onMounted(() => {
         &.text-input {
           .main-suggestion-text {
             .text-wrapper {
-              color: #2563EB;
+              color: #2563eb;
             }
           }
         }

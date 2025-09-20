@@ -173,29 +173,20 @@ const compiledMarkdown = computed(() => {
 }
 </style> -->
 
-
 <template>
-  <div
-    class="markdown-content"
-    v-html="compiledMarkdown"
-    @click="handleImageClick"
-  ></div>
+  <div class="markdown-content" v-html="compiledMarkdown" @click="handleImageClick"></div>
 
   <!-- Fullscreen Image Preview -->
-  <div
-    v-if="showPreview"
-    class="image-preview-modal"
-    @click.self="closePreview"
-  >
+  <div v-if="showPreview" class="image-preview-modal" @click.self="closePreview">
     <img :src="previewSrc" alt="Preview Image" class="preview-img" />
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps, ref, onMounted } from "vue";
-import MarkdownIt from "markdown-it";
-import hljs from "highlight.js";
-import "highlight.js/styles/github.css";
+import { computed, defineProps, ref, onMounted } from 'vue';
+import MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 
 // ✅ Props
 const props = defineProps({
@@ -204,11 +195,11 @@ const props = defineProps({
 
 // ✅ State for preview
 const showPreview = ref(false);
-const previewSrc = ref("");
+const previewSrc = ref('');
 
 const handleImageClick = (e) => {
   const target = e.target;
-  if (target.tagName === "IMG") {
+  if (target.tagName === 'IMG') {
     previewSrc.value = target.src;
     showPreview.value = true;
   }
@@ -226,9 +217,7 @@ const md = new MarkdownIt({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<pre class="hljs"><code>${
-          hljs.highlight(str, { language: lang }).value
-        }</code></pre>`;
+        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
       } catch (__) {}
     }
     return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
@@ -247,7 +236,7 @@ const hexColorPlugin = (md) => {
     if (!match) return false; // ✅ allow hex inside text
 
     if (!silent) {
-      const token = state.push("hex_color", "", 0);
+      const token = state.push('hex_color', '', 0);
       token.content = match[0];
     }
 
@@ -255,7 +244,7 @@ const hexColorPlugin = (md) => {
     return true;
   }
 
-  md.inline.ruler.before("text", "hex_color", tokenize);
+  md.inline.ruler.before('text', 'hex_color', tokenize);
 
   md.renderer.rules.hex_color = (tokens, idx) => {
     const hex = tokens[idx].content;
@@ -279,16 +268,16 @@ md.use(hexColorPlugin);
 md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
   const token = tokens[idx];
 
-  if (token.attrIndex("target") < 0) {
-    token.attrPush(["target", "_blank"]);
+  if (token.attrIndex('target') < 0) {
+    token.attrPush(['target', '_blank']);
   } else {
-    token.attrs[token.attrIndex("target")][1] = "_blank";
+    token.attrs[token.attrIndex('target')][1] = '_blank';
   }
 
-  if (token.attrIndex("rel") < 0) {
-    token.attrPush(["rel", "noopener noreferrer"]);
+  if (token.attrIndex('rel') < 0) {
+    token.attrPush(['rel', 'noopener noreferrer']);
   } else {
-    token.attrs[token.attrIndex("rel")][1] = "noopener noreferrer";
+    token.attrs[token.attrIndex('rel')][1] = 'noopener noreferrer';
   }
 
   return self.renderToken(tokens, idx, options);
@@ -300,10 +289,10 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 md.renderer.rules.fence = (tokens, idx) => {
   const token = tokens[idx];
   const rawCode = token.content;
-  const lang = token.info.trim() || "text";
+  const lang = token.info.trim() || 'text';
 
   // highlight.js highlighting
-  let highlighted = "";
+  let highlighted = '';
   if (lang && hljs.getLanguage(lang)) {
     try {
       highlighted = hljs.highlight(rawCode, { language: lang }).value;
@@ -341,7 +330,7 @@ function handleClickOutside(e) {
   const target = e.target;
 
   // Ignore clicks inside .text-message
-  if (target.closest(".text-message")) return;
+  if (target.closest('.text-message')) return;
 
   // Ignore clicks in editable fields
   if (target.closest("textarea, input, [contenteditable='true']")) return;
@@ -351,26 +340,26 @@ function handleClickOutside(e) {
 }
 
 onMounted(() => {
-  document.addEventListener("click", (e) => {
+  document.addEventListener('click', (e) => {
     // ✅ Color swatch copy
-    const box = e.target.closest(".color-box");
+    const box = e.target.closest('.color-box');
     if (box) {
-      const tooltip = box.querySelector(".tooltip");
+      const tooltip = box.querySelector('.tooltip');
       const hex = tooltip.textContent;
       navigator.clipboard.writeText(hex).then(() => {
-        tooltip.textContent = "Copied!";
+        tooltip.textContent = 'Copied!';
         setTimeout(() => (tooltip.textContent = hex), 1200);
       });
     }
 
     // ✅ Code block copy
-    const btn = e.target.closest(".copy-btn"); // works even if clicking SVG/text
+    const btn = e.target.closest('.copy-btn'); // works even if clicking SVG/text
     if (btn) {
       const code = decodeURIComponent(btn.dataset.code);
-      const textEl = btn.querySelector(".copy-text");
+      const textEl = btn.querySelector('.copy-text');
       navigator.clipboard.writeText(code).then(() => {
-        textEl.textContent = "Copied!";
-        setTimeout(() => (textEl.textContent = "Copy"), 1200);
+        textEl.textContent = 'Copied!';
+        setTimeout(() => (textEl.textContent = 'Copy'), 1200);
       });
     }
     handleClickOutside(e);
@@ -575,11 +564,11 @@ onMounted(() => {
   border-radius: 0.5rem;
   margin: 1.25rem 0;
   padding: 1rem;
-  font-family: "Geist Mono", monospace !important;
+  font-family: 'Geist Mono', monospace !important;
   overflow: hidden;
   max-width: 70%;
   & * {
-    font-family: "Geist Mono", monospace !important;
+    font-family: 'Geist Mono', monospace !important;
   }
 
   pre {
@@ -587,7 +576,7 @@ onMounted(() => {
     background: transparent !important;
     overflow-x: auto;
     white-space: pre;
-    font-family: "Geist Mono", monospace !important;
+    font-family: 'Geist Mono', monospace !important;
   }
 
   code {
@@ -598,7 +587,7 @@ onMounted(() => {
     color: #1f2937;
 
     & * {
-      font-family: "Geist Mono", monospace !important;
+      font-family: 'Geist Mono', monospace !important;
     }
 
     :deep(.hljs-keyword) {

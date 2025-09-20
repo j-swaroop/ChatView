@@ -4,9 +4,9 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import MarkdownIt from "markdown-it";
-import DOMPurify from "dompurify";
+import { computed } from 'vue';
+import MarkdownIt from 'markdown-it';
+import DOMPurify from 'dompurify';
 
 const props = defineProps({
   content: {
@@ -23,14 +23,14 @@ const md = new MarkdownIt({
 // ----------------- Ordered List -----------------
 md.renderer.rules.ordered_list_open = function (tokens, idx) {
   const token = tokens[idx];
-  const start = parseInt(token.attrGet("start") || "1", 10);
-  token.attrSet("data-start", start);
+  const start = parseInt(token.attrGet('start') || '1', 10);
+  token.attrSet('data-start', start);
   token.meta = { counter: start }; // store state
   return `<div class="custom-ol" data-start="${start}">`;
 };
 
 md.renderer.rules.ordered_list_close = function () {
-  return "</div>";
+  return '</div>';
 };
 
 md.renderer.rules.list_item_open = function (tokens, idx) {
@@ -39,15 +39,15 @@ md.renderer.rules.list_item_open = function (tokens, idx) {
   let isOrdered = false;
 
   for (let i = idx; i >= 0; i--) {
-    if (tokens[i].type === "ordered_list_open") {
-      const start = parseInt(tokens[i].attrGet("data-start") || "1", 10);
+    if (tokens[i].type === 'ordered_list_open') {
+      const start = parseInt(tokens[i].attrGet('data-start') || '1', 10);
       const pos = tokens[i].meta?.counter ?? start;
       count = pos;
       tokens[i].meta = { counter: pos + 1 }; // increment counter
       isOrdered = true;
       break;
     }
-    if (tokens[i].type === "bullet_list_open") {
+    if (tokens[i].type === 'bullet_list_open') {
       isOrdered = false;
       break;
     }
@@ -61,7 +61,7 @@ md.renderer.rules.list_item_open = function (tokens, idx) {
 };
 
 md.renderer.rules.list_item_close = function () {
-  return "</div></div>";
+  return '</div></div>';
 };
 
 // ----------------- Unordered List -----------------
@@ -70,11 +70,11 @@ md.renderer.rules.bullet_list_open = function () {
 };
 
 md.renderer.rules.bullet_list_close = function () {
-  return "</div>";
+  return '</div>';
 };
 
 const compiledMarkdown = computed(() => {
-  const rawHtml = md.render(props.content || "");
+  const rawHtml = md.render(props.content || '');
   return DOMPurify.sanitize(rawHtml);
 });
 </script>

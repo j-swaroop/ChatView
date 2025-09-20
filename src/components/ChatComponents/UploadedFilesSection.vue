@@ -10,10 +10,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["file:remove"]);
+const emit = defineEmits(['file:remove']);
 
 function handleRemoveUploadedFile(index) {
-  emit("file:remove", index);
+  emit('file:remove', index);
 }
 </script>
 <template>
@@ -25,11 +25,7 @@ function handleRemoveUploadedFile(index) {
         class="uploaded-file-card"
         :class="{ image: file?.fileType?.startsWith('image') }"
       >
-        <div
-          v-if="!hideRemoveFileIcon"
-          @click="handleRemoveUploadedFile(index)"
-          class="cross-icon"
-        >
+        <div v-if="!hideRemoveFileIcon" @click="handleRemoveUploadedFile(index)" class="cross-icon">
           <!-- <img :src="$appImages['crossIcon3.svg']" /> -->
         </div>
         <div class="file-preview">
