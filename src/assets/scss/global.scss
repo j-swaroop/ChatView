@@ -93,3 +93,30 @@ body {
   pointer-events: none;
   opacity: 0.5;
 }
+// Custom Webkit Scrollbar
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9CA3AF;
+  border-radius: 2px;
+
+  &:hover {
+    background: #929aa7;
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+// Remove scrollbar buttons (arrows)
+::-webkit-scrollbar-button {
+  display: none;
+}

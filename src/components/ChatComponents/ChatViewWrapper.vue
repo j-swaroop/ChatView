@@ -171,8 +171,8 @@ function handlePauseResponse() {
   justify-content: center;
   height: 100%;
   width: 100%;
-  padding: 1rem;
-  max-width: 56.25rem;
+  // padding: 1rem;
+  // max-width: 56.25rem;
   transition: all 0.5s ease;
   overflow: auto;
 }
@@ -240,6 +240,9 @@ function handlePauseResponse() {
     width: 100%;
     transition: all 0.5s ease;
     position: relative;
+    max-width: 56.25rem;
+    padding: 1rem 0;
+    padding-top: 0;
     .upload-file-section-wrapper {
       width: 100%;
       &.absolute-positioned {

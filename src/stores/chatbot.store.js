@@ -5,7 +5,102 @@ export const useChatbotStore = defineStore('chatBotStore', {
   state: () => ({
     isPrimaryTextareaFocused: false,
     currentConversationId: '1243',
-    conversationList: [],
+    conversationList: [
+      {
+        _id: 1,
+        role: 'user',
+        message: 'Hello! Can you help me understand how to use this chat interface?',
+        uploadedFiles: [],
+      },
+      {
+        _id: 2,
+        role: 'assistant',
+        message: 'Hello! I\'d be happy to help you understand how to use this chat interface. This is a conversational AI assistant that can help you with various tasks. You can type your questions or requests in the text area below, and I\'ll do my best to assist you. Feel free to ask me anything!',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [],
+      },
+      {
+        _id: 3,
+        role: 'user',
+        message: 'What can you help me with?',
+        uploadedFiles: [],
+      },
+      {
+        _id: 4,
+        role: 'assistant',
+        message: 'I can help you with a wide variety of tasks including:\n\n• **General Questions**: Answer questions on various topics\n• **Code Help**: Assist with programming and debugging\n• **Writing**: Help with essays, emails, creative writing\n• **Analysis**: Analyze data, documents, or images\n• **Problem Solving**: Work through complex problems step by step\n• **Learning**: Explain concepts and provide educational content\n• **Planning**: Help organize tasks, projects, or events\n\nJust describe what you need help with, and I\'ll do my best to assist you!',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [],
+      },
+      {
+        _id: 5,
+        role: 'user',
+        message: 'Can you help me write a simple JavaScript function?',
+        uploadedFiles: [],
+      },
+      {
+        _id: 6,
+        role: 'assistant',
+        message: 'Absolutely! Here\'s a simple JavaScript function example:\n\n```javascript\nfunction greetUser(name) {\n  return `Hello, ${name}! Welcome to our chat interface.`;\n}\n\n// Usage example\nconst message = greetUser("John");\nconsole.log(message); // Output: "Hello, John! Welcome to our chat interface."\n```\n\nThis function:\n- Takes a `name` parameter\n- Returns a personalized greeting message\n- Uses template literals for string interpolation\n\nWould you like me to help you with a specific function or explain any part of this code?',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [],
+      },
+      {
+        _id: 7,
+        role: 'user',
+        message: 'That\'s great! Can you also help me with CSS styling? I want to center a div element.',
+        uploadedFiles: [],
+      },
+      {
+        _id: 8,
+        role: 'assistant',
+        message: 'Of course! Here are several ways to center a div element in CSS:\n\n## Method 1: Flexbox (Recommended)\n```css\n.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh; /* or any desired height */\n}\n```\n\n## Method 2: CSS Grid\n```css\n.container {\n  display: grid;\n  place-items: center;\n  height: 100vh;\n}\n```\n\n## Method 3: Traditional Centering\n```css\n.container {\n  position: relative;\n  height: 100vh;\n}\n\n.centered-div {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n}\n```\n\n## Method 4: Margin Auto (for block elements)\n```css\n.centered-div {\n  width: 300px; /* set a width */\n  margin: 0 auto;\n}\n```\n\nThe flexbox method is generally the most modern and flexible approach. Which method would work best for your specific use case?',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [],
+      },
+      {
+        _id: 9,
+        role: 'user',
+        message: 'Can you help me create a modern card design with an image?',
+        uploadedFiles: [
+          {
+            url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+            name: 'mountain-landscape.jpg',
+            type: 'image/jpeg'
+          }
+        ],
+      },
+      {
+        _id: 10,
+        role: 'assistant',
+        message: 'Absolutely! I can see you\'ve uploaded a beautiful mountain landscape image. Here\'s a modern card design that will showcase it perfectly.\n\nThis design features:\n- Rounded corners for a modern look\n- Subtle shadows with hover effects\n- Responsive image sizing\n- Clean typography hierarchy\n- Smooth transitions\n\nThe card will have a clean, minimalist appearance that highlights your beautiful mountain landscape image with elegant styling and smooth hover animations.',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [
+          {
+            isSkeleton: false,
+            url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
+          },
+          {
+            isSkeleton: false,
+            url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop'
+          },
+          {
+            isSkeleton: false,
+            url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=300&fit=crop'
+          }
+        ],
+      }
+    ],
     currentStreamAbortController: null,
   }),
   actions: {
