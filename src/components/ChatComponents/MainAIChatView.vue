@@ -3,6 +3,11 @@ import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 
 // import UploadedFilesSection from "./UploadedFilesSection.vue";
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
+import { useChatbotStore } from '@/stores/chatbot.store';
+
+const chatbotStore = useChatbotStore();
+
+const { downloadImage, openFullScreenImageViewer } = chatbotStore;
 
 const props = defineProps({
   chats: {
@@ -367,6 +372,21 @@ const getImageProcessingTimeText = computed(() => {
                 );
                 background-size: 400% auto;
                 animation: shimmer 10s linear infinite;
+              }
+              &.scale-animation{
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.35s ease;
+                
+                .generated-img {
+                  transition: transform 0.35s ease;
+                }
+                
+                &:hover{
+                  .generated-img{
+                    transform: scale(1.1);
+                  }
+                }
               }
               .image-actions {
                 position: absolute;

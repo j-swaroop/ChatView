@@ -2,6 +2,7 @@
 import PrimaryInput from '@/components/ChatComponents/PrimaryInput.vue';
 import MainAIChatView from './MainAIChatView.vue';
 import UploadedFilesSection from './UploadedFilesSection.vue';
+import FullScreenImageViewer from './FullScreenImageViewer.vue';
 
 import { storeToRefs } from 'pinia';
 import { ref, inject, computed, onMounted } from 'vue';
@@ -9,10 +10,16 @@ import { useChatbotStore } from '@/stores/chatbot.store';
 
 const chatbotStore = useChatbotStore();
 
-const { currentConversationId, conversationList, isStreamingGenerationInProgress, currentStreamAbortController } =
-  storeToRefs(chatbotStore);
+const {
+  currentConversationId,
+  conversationList,
+  isStreamingGenerationInProgress,
+  currentStreamAbortController,
+  currentSelectedImageForFullView,
+} = storeToRefs(chatbotStore);
 
-const { convertAndResizeImageToBase64, startAiAgentResponseStreaming } = chatbotStore;
+const { convertAndResizeImageToBase64, startAiAgentResponseStreaming, openFullScreenImageViewer, downloadImage } =
+  chatbotStore;
 
 const messageInput = ref('');
 const uploadedFiles = ref([]);
@@ -160,6 +167,12 @@ function handlePauseResponse() {
         />
       </div>
     </div>
+    <FullScreenImageViewer
+      v-if="currentSelectedImageForFullView"
+      :current-selected-image-for-full-view="currentSelectedImageForFullView"
+      @downloadImage="downloadImage"
+      @fullScreenViewerClose="openFullScreenImageViewer"
+    />
   </div>
 </template>
 
