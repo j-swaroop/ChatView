@@ -22,6 +22,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  short: { 
+    type: [Boolean, String, Number], 
+    default: false 
+  },
 });
 
 const emit = defineEmits([
@@ -44,6 +48,10 @@ let typingTimeout = null;
 
 const showDropdownSuggestions = computed(() => {
   return isTextAreaFocused.value && !props.hideSuggestionsDropdown && props.dropdownSuggestions.length;
+});
+
+const textAreaHeight = computed(() => {
+  return props.short ? 30 : 80;
 });
 
 const allSuggestions = computed(() => {
@@ -76,9 +84,12 @@ function handleTextareaBlur() {
 // --- auto-resize textarea ---
 function autoResizeTextarea() {
   if (textareaRef.value) {
-    textareaRef.value.style.height = 'auto';
-    const maxHeight = window.innerHeight * 0.5;
-    textareaRef.value.style.height = `${Math.min(Math.max(textareaRef.value.scrollHeight, 80), maxHeight)}px`;
+    textareaRef.value.style.height = "auto";
+    const maxHeight = window.innerHeight * 0.3;
+    textareaRef.value.style.height = `${Math.min(
+      Math.max(textareaRef.value.scrollHeight, textAreaHeight.value),
+      maxHeight
+    )}px`;
   }
 }
 
@@ -132,7 +143,7 @@ function handleSubmitMessage() {
   emit('submit:message', props.modelValue);
   emit('update:modelValue', '');
   if (textareaRef.value) {
-    textareaRef.value.style.height = '1.875rem';
+    textareaRef.value.style.height = '30px';
   }
 }
 
@@ -352,7 +363,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  min-height: 9rem;
+  min-height: 6.375rem;
   border-radius: 0.5rem;
   border: 1px solid var(--gray-100, #e5e7eb);
   background: rgba(255, 255, 255, 0.85);
@@ -365,8 +376,8 @@ onMounted(() => {
     width: 100%;
     textarea {
       width: 100%;
-      min-height: 5rem; /* Minimum height */
-      max-height: 50vh; /* Maximum height */
+      // min-height: 5rem; /* Minimum height */
+      max-height: 30vh; /* Maximum height */
       resize: none; /* Prevent manual resizing */
       overflow-y: auto; /* Scroll if content exceeds max-height */
       color: #4b5563;

@@ -81,7 +81,7 @@ const getImageProcessingTimeText = computed(() => {
   <div class="main-ai-chat-view-wrapper" ref="chatWrapperRef" :class="{ bottomSpacing: chats.length > 2 }">
     <div
       v-for="(chat, index) in chats"
-      :key="chat.id"
+      :key="chat._id"
       class="message-container"
       :class="[chat.role]"
       :ref="index === chats.length - 1 ? lastMessageRef : null"

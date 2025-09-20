@@ -262,38 +262,6 @@ export const useChatbotStore = defineStore('chatBotStore', {
             }
           }
 
-          //Shop flow
-          // if (data['tool_name'] === 'search_products' && data['output']) {
-          //   console.log('getting searched products from the websites');
-          //   let otherWebsitesResponse = Array.isArray(data?.output?.search_other_websites_response)
-          //     ? data.output.search_other_websites_response
-          //     : [];
-
-          //   let prefferedWebsitesResponse = Array.isArray(data?.output?.search_preferred_websites_response)
-          //     ? data.output.search_preferred_websites_response
-          //     : [];
-
-          //   let localResponse = Array.isArray(data?.output?.search_local_catalog_response)
-          //     ? data.output.search_local_catalog_response
-          //     : [];
-
-          //   lastMessage.shoppingList = [
-          //     ...localResponse.map((p) => ({
-          //       ...p,
-          //       isLocal: true,
-          //     })),
-          //     ...prefferedWebsitesResponse.map((p) => ({
-          //       ...p,
-          //       isPreffered: true,
-          //     })),
-          //     ...otherWebsitesResponse.map((p) => ({
-          //       ...p,
-          //       isOther: true,
-          //     })),
-          //   ];
-          //   lastMessage.finding = false;
-          // }
-
           //resets
 
           if (data['tool_name'] === 'identify_objects') {
