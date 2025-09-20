@@ -16,6 +16,6 @@ import ChatViewWrapper from '@/components/ChatComponents/ChatViewWrapper.vue';
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #f9f9f9;
+  background: #f2f1eb;
 }
 </style>

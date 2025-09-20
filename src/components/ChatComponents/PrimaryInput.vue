@@ -22,9 +22,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  short: { 
-    type: [Boolean, String, Number], 
-    default: false 
+  short: {
+    type: [Boolean, String, Number],
+    default: false,
   },
 });
 
@@ -84,7 +84,7 @@ function handleTextareaBlur() {
 // --- auto-resize textarea ---
 function autoResizeTextarea() {
   if (textareaRef.value) {
-    textareaRef.value.style.height = "auto";
+    textareaRef.value.style.height = 'auto';
     const maxHeight = window.innerHeight * 0.3;
     textareaRef.value.style.height = `${Math.min(
       Math.max(textareaRef.value.scrollHeight, textAreaHeight.value),
@@ -366,8 +366,8 @@ onMounted(() => {
   min-height: 6.375rem;
   border-radius: 0.5rem;
   border: 1px solid var(--gray-100, #e5e7eb);
-  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(50px);
+  background: #f9fafb;
   transition: border-color 0.5s ease;
   &:focus-within {
     border-color: #3b82f6;
@@ -388,6 +388,7 @@ onMounted(() => {
       caret-color: #4b5563;
       outline: none;
       border: none;
+      background: transparent;
       &:focus {
         outline: none;
       }

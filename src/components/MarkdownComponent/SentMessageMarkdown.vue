@@ -73,9 +73,31 @@ md.renderer.rules.bullet_list_close = function () {
   return '</div>';
 };
 
+// ✅ Force all links open in new tab
+md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+  const token = tokens[idx];
+
+  if (token.attrIndex('target') < 0) {
+    token.attrPush(['target', '_blank']);
+  } else {
+    token.attrs[token.attrIndex('target')][1] = '_blank';
+  }
+
+  if (token.attrIndex('rel') < 0) {
+    token.attrPush(['rel', 'noopener noreferrer']);
+  } else {
+    token.attrs[token.attrIndex('rel')][1] = 'noopener noreferrer';
+  }
+
+  return self.renderToken(tokens, idx, options);
+};
+
 const compiledMarkdown = computed(() => {
   const rawHtml = md.render(props.content || '');
-  return DOMPurify.sanitize(rawHtml);
+  return DOMPurify.sanitize(rawHtml, {
+    ADD_ATTR: ['target', 'rel'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'id'],
+  });
 });
 </script>
 
@@ -85,7 +107,7 @@ const compiledMarkdown = computed(() => {
   line-height: 1.5;
   & * {
     color: var(--gray-600, #4b5563);
-    font-family: Nunito;
+    font-family: math, 'Helvetica Neue', Arial, sans-serif;
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
@@ -116,6 +138,14 @@ const compiledMarkdown = computed(() => {
 
   :deep(.custom-li-content) {
     flex: 1;
+  }
+}
+</style>
+
+<style lang="scss">
+.sent-message-markdown {
+  p {
+    margin: 0;
   }
 }
 </style>

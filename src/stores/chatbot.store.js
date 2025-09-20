@@ -95,10 +95,25 @@ export const useChatbotStore = defineStore('chatBotStore', {
             url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop'
           },
           {
-            isSkeleton: false,
-            url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=300&fit=crop'
+            isSkeleton: true,
+            // url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=300&fit=crop'
           }
         ],
+      },
+      {
+        _id: 13,
+        role: 'user',
+        message: 'How can I implement real-time chat with Socket.IO?',
+        uploadedFiles: [],
+      },
+      {
+        _id: 14,
+        role: 'assistant',
+        message: 'Great question! Socket.IO is perfect for real-time chat applications. Here\'s how you can implement it:\n\n## Key Concepts\nSocket.IO enables real-time, bidirectional communication between web clients and servers.\n\n## Essential Resources\n- [Socket.IO Official Documentation](https://socket.io/docs/v4/)\n- [Socket.IO Client API](https://socket.io/docs/v4/client-api/)\n- [Real-time Chat Tutorial](https://socket.io/get-started/chat/)\n- [Socket.IO GitHub Repository](https://github.com/socketio/socket.io)\n\n## Basic Implementation\n1. **Server Setup** - Install and configure Socket.IO server\n2. **Client Connection** - Connect from your frontend application\n3. **Event Handling** - Listen for and emit events\n4. **Room Management** - Organize users into chat rooms\n\n## Popular Alternatives\n- [Pusher](https://pusher.com/) - Hosted real-time messaging service\n- [Firebase Realtime Database](https://firebase.google.com/products/realtime-database) - Google\'s real-time solution\n- [WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) - Native browser WebSocket support\n\nSocket.IO provides excellent fallbacks and handles connection issues automatically, making it ideal for production chat applications!',
+        thinking: false,
+        isGenerating: false,
+        identifying: false,
+        generatedImages: [],
       }
     ],
     currentStreamAbortController: null,

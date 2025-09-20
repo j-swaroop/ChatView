@@ -202,10 +202,19 @@ onMounted(() => {
   :deep(p) {
     // margin: 0 0 1em;
     line-height: 125%;
+
+    a {
+      background: var(--blue-500, #649df8);
+      color: var(--color-white, #fff);
+      transition: all 0.35s ease-in;
+      &:hover {
+        background: var(--blue-500, #3e85f7);
+      }
+    }
   }
   :deep(*) {
     user-select: text;
-    font-family: Nunito;
+    font-family: math, 'Helvetica Neue', Arial, sans-serif;
   }
   :deep(li::marker) {
     user-select: all;
@@ -307,6 +316,22 @@ onMounted(() => {
     font-style: italic;
     margin-bottom: 0.75rem;
     color: #6b7280; // gray-500
+  }
+
+  :deep(ul) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    li {
+      a {
+        background: var(--blue-500, #649df8);
+        color: var(--color-white, #fff);
+        transition: all 0.35s ease-in;
+        &:hover {
+          background: var(--blue-500, #3e85f7);
+        }
+      }
+    }
   }
 }
 
@@ -445,7 +470,6 @@ onMounted(() => {
   top: 0.5rem;
   left: 0.5rem;
   color: var(--gray-400, #9ca3af);
-  font-family: Nunito;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
@@ -458,7 +482,6 @@ onMounted(() => {
   top: 0.5rem;
   right: 0.5rem;
   color: var(--gray-400, #9ca3af);
-  font-family: Nunito;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
@@ -468,10 +491,26 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  svg {
+    transition: all 0.35s ease;
+    path {
+      transition: all 0.35s ease;
 
-  // &:hover {
-  //   background: #d1d5db; // gray-300
-  // }
+      fill: var(--gray-400, #9ca3af);
+    }
+  }
+  &:hover {
+    color: var(--gray-400, #393a3a);
+    svg {
+      path {
+        fill: var(--gray-400, #393a3a);
+      }
+    }
+  }
 }
 
 @keyframes fadeIn {
