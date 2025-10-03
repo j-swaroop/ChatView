@@ -122,6 +122,7 @@ export const useChatbotStore = defineStore('chatBotStore', {
         generatedImages: [],
       },
     ],
+    // conversationList: [],
     currentStreamAbortController: null,
     currentSelectedImageForFullView: '',
     hideFullPageImageViewer: false,

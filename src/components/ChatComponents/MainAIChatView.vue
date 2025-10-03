@@ -240,11 +240,13 @@ const getImageProcessingTimeText = computed(() => {
     flex-flow: column nowrap;
     align-items: center;
     justify-content: flex-start;
-    height: 100%;
+    // height: 100%;
     width: 100%;
     max-width: 56.25rem;
     gap: 1rem;
-    padding: 1rem 0;
+    padding: 2rem 0;
+    // padding-bottom: 2rem;
+    flex: 1 0 0;
 
     &.bottomSpacing {
       // padding-bottom: 58vh;
