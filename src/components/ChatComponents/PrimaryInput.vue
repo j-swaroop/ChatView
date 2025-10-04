@@ -239,11 +239,18 @@ onMounted(() => {
     document.removeEventListener('keypress', handleGlobalTyping);
     clearTimeout(typingTimeout);
   });
+
+  console.log(props.short, '✅ PrimaryInput mounted with short prop');
 });
 </script>
 
 <template>
-  <div class="prompt-box-container">
+  <div
+    class="prompt-box-container"
+    :class="{
+      animateBorder: inProgress,
+    }"
+  >
     <div class="prompt-input-area">
       <textarea
         :value="modelValue"
@@ -353,6 +360,20 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes rotateBorder {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
 ::-webkit-scrollbar {
   display: none;
 }
@@ -369,6 +390,36 @@ onMounted(() => {
   backdrop-filter: blur(50px);
   background: #f9fafb;
   transition: border-color 0.5s ease;
+  &.animateBorder {
+    border-color: transparent;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0; // cover whole box
+      border-radius: inherit;
+      padding: 1px; // thickness of border
+      background: conic-gradient(
+          from var(--angle) at 50% 50%,
+          #3b82f6,
+          rgba(249, 250, 251, 0.75) 25%,
+          rgba(249, 250, 251, 0.75) 75%,
+          #2563eb
+        )
+        border-box;
+
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+
+      pointer-events: none;
+      animation: rotateBorder 2s linear infinite;
+    }
+    &:focus-within {
+      border-color: transparent;
+    }
+  }
   &:focus-within {
     border-color: #3b82f6;
   }
@@ -393,7 +444,7 @@ onMounted(() => {
         outline: none;
       }
       &::placeholder {
-        color: var(--gray-300, #d1d5db);
+        color: var(--gray-300, #ababab);
       }
     }
   }

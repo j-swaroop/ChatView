@@ -26,7 +26,7 @@ const uploadedFiles = ref([]);
 const appImages = inject('appImages');
 
 const promptInputPlaceholder = computed(() => {
-  return `Type or say what you need… (e.g., 'Summarize today's tasks')`;
+  return `Type or say what you need… (e.g., "Help me write a professional email")`;
 });
 
 const dropdownSuggestions = computed(() => {
@@ -170,7 +170,7 @@ function handlePauseResponse() {
           :textarea-placeholder="promptInputPlaceholder"
           :dropdown-suggestions="dropdownSuggestions"
           :hideSuggestionsDropdown="conversationList?.length"
-          :inProgress="isStreamingGenerationInProgress || false"
+          :inProgress="isStreamingGenerationInProgress"
           :short="conversationList.length"
           @files-selected="handleFilesSelected"
           @submit:message="handleSubmitMessage"
