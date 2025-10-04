@@ -295,7 +295,7 @@ const copyMessage = (chat) => {
     max-width: 56.25rem;
     gap: 2rem;
     padding: 2rem 0;
-    // padding-bottom: 2rem;
+    padding-bottom: 20%;
     flex: 1 0 0;
 
     &.bottomSpacing {
