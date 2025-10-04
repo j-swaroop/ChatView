@@ -52,26 +52,27 @@ async function handleFilesSelected(files) {
   // Step 1: convert/resize images before preparing previews
   const processedFiles = await Promise.all(
     filesArray.map(async (file) => {
-      if (file.type.startsWith('image/')) {
-        // ✅ Convert & resize image, return {file, base64}
-        return await convertAndResizeImageToBase64(file);
+      if (file.type.startsWith("image/")) {
+        const { base64, originalName } = await convertAndResizeImageToBase64(
+          file
+        );
+        return { file, base64, isImage: true, originalName };
       }
-      // Non-images: keep file but no preview
-      return { file, base64: null };
+      return { file, base64: null, isImage: false, originalName: file.name };
     })
   );
 
-  // Step 2: prepare previews
-  const previews = processedFiles.map(({ file, base64, isImage, originalName }) => ({
+  // Step 2: prepare previews with isUploading=true (push early so UI shows skeleton)
+  const previews = processedFiles.map(({ file, base64, isImage }) => ({
     _id: crypto.randomUUID(),
-    preview: base64, // base64 only for images
-    type: isImage ? 'png' : file.type.split('/')[1] || 'unknown', // keep real extension for non-images
+    preview: base64,
+    type: isImage ? "png" : file.type.split("/")[1] || "unknown",
     fileType: file.type,
     url: null,
     file,
     fileName: file.name,
     // icon: getFileIconByFileType(file.type),
-    // icon: "file-icon",
+    isUploading: true, // ✅ show skeleton
   }));
 
   uploadedFiles.value.push(...previews);
@@ -98,6 +99,14 @@ async function handleFilesSelected(files) {
 
 function handleRemoveUploadedFile(index) {
   uploadedFiles.value.splice(index, 1);
+}
+
+function handleUploadedFileClicked(file) {
+  if (file.fileType.startsWith("image/")) {
+    const fileToShow = file.url || file.preview;
+    openFullScreenImageViewer(fileToShow);
+  } else {
+  }
 }
 
 function handleSubmitMessage(message) {
@@ -140,8 +149,9 @@ function handlePauseResponse() {
       </div>
 
       <div class="prompt-input-wrapper">
-        <!-- <transition name="uploaded-files-transition"> -->
-        <!-- <div
+
+        <transition name="uploaded-files-transition">
+          <div
             class="upload-file-section-wrapper"
             v-if="uploadedFiles.length"
             :class="{ 'absolute-positioned': conversationList.length }"
@@ -149,10 +159,11 @@ function handlePauseResponse() {
             <UploadedFilesSection
               v-if="uploadedFiles.length"
               :uploaded-files="uploadedFiles"
+              @file:clicked="handleUploadedFileClicked"
               @file:remove="handleRemoveUploadedFile"
             />
-          </div> -->
-        <!-- </transition> -->
+          </div>
+        </transition>
 
         <PrimaryInput
           v-model="messageInput"
