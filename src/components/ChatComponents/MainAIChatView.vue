@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 'vue';
-import UploadedFilesSection from "./UploadedFilesSection.vue";
+import UploadedFilesSection from './UploadedFilesSection.vue';
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
 import { useChatbotStore } from '@/stores/chatbot.store';
@@ -29,8 +29,17 @@ const elapsedTime = ref(0); // In whole seconds for messaging
 let intervalId = null;
 let startTime = null;
 
+// const hasLoadingBlocks = computed(() => {
+//   return chats.value?.some((chat) => chat?.generatedImages?.some((item) => item.isSkeleton));
+// });
+
+// ✅ Track only the last message in conversationsArray
+const lastMessage = computed(() => {
+  return chats.value?.[chats.value.length - 1] || null;
+});
+
 const hasLoadingBlocks = computed(() => {
-  return chats.value?.some((chat) => chat?.generatedImages?.some((item) => item.isSkeleton));
+  return lastMessage.value?.generatedImages?.some((item) => item.isSkeleton) || false;
 });
 
 watch(
@@ -79,9 +88,8 @@ const getImageProcessingTimeText = computed(() => {
   return elapsed.value >= 60 ? 'Almost there..' : `${elapsed.value.toFixed(1)}/60s`;
 });
 
-
 function handleUploadedFileClicked(file) {
-  if (file.fileType.startsWith("image")) {
+  if (file.fileType.startsWith('image')) {
     const fileToShow = file.url || file.preview;
     openFullScreenImageViewer(fileToShow);
   } else {
@@ -113,12 +121,15 @@ function handleUploadedFileClicked(file) {
           <div v-if="chat?.error" class="error-message">
             {{ 'Failed to generate response. Please try again.' }}
           </div>
-          <UploadedFilesSection
-            v-if="chat?.uploadedFiles?.length"
-            :uploaded-files="chat?.uploadedFiles"
-            :hide-remove-file-icon="true"
-            @file:clicked="handleUploadedFileClicked"
-          />
+
+          <div v-if="chat?.uploadedFiles?.length" class="images-user-messages-block-wrapper">
+            <UploadedFilesSection
+              v-if="chat?.uploadedFiles?.length"
+              :uploaded-files="chat?.uploadedFiles"
+              :hide-remove-file-icon="true"
+              @file:clicked="handleUploadedFileClicked"
+            />
+          </div>
 
           <div v-if="chat?.generatedImages?.length" class="generated-images-wrapper">
             <div class="generated-images">
@@ -548,6 +559,43 @@ function handleUploadedFileClicked(file) {
           width: fit-content; // ✅ bubble wraps only around its text
           :deep(*) {
             user-select: text;
+          }
+        }
+        .images-user-messages-block-wrapper {
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          .selected-image-edited-section {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            .reference-icon {
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: center;
+              justify-content: center;
+              img {
+                height: 2rem;
+                width: 2rem;
+              }
+            }
+            .selected-image {
+              display: flex;
+              flex-flow: row nowrap;
+              align-items: center;
+              justify-content: center;
+              img {
+                height: 3.5rem;
+                width: 3.5rem;
+                filter: brightness(0.8);
+                border-radius: 0.5rem;
+                object-fit: cover;
+              }
+            }
           }
         }
       }
