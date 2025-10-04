@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 'vue';
-// import UploadedFilesSection from "./UploadedFilesSection.vue";
+import UploadedFilesSection from "./UploadedFilesSection.vue";
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
 import { useChatbotStore } from '@/stores/chatbot.store';
@@ -79,7 +79,14 @@ const getImageProcessingTimeText = computed(() => {
   return elapsed.value >= 60 ? 'Almost there..' : `${elapsed.value.toFixed(1)}/60s`;
 });
 
-//--------------------------------------------------------------------------------------------
+
+function handleUploadedFileClicked(file) {
+  if (file.fileType.startsWith("image")) {
+    const fileToShow = file.url || file.preview;
+    openFullScreenImageViewer(fileToShow);
+  } else {
+  }
+}
 </script>
 
 <template>
@@ -106,11 +113,12 @@ const getImageProcessingTimeText = computed(() => {
           <div v-if="chat?.error" class="error-message">
             {{ 'Failed to generate response. Please try again.' }}
           </div>
-          <!-- <UploadedFilesSection
-          v-if="chat?.uploadedFiles?.length"
-          :uploaded-files="chat?.uploadedFiles"
-          :hide-remove-file-icon="true"
-        /> -->
+          <UploadedFilesSection
+            v-if="chat?.uploadedFiles?.length"
+            :uploaded-files="chat?.uploadedFiles"
+            :hide-remove-file-icon="true"
+            @file:clicked="handleUploadedFileClicked"
+          />
 
           <div v-if="chat?.generatedImages?.length" class="generated-images-wrapper">
             <div class="generated-images">
@@ -375,17 +383,17 @@ const getImageProcessingTimeText = computed(() => {
                 background-size: 400% auto;
                 animation: shimmer 10s linear infinite;
               }
-              &.scale-animation{
+              &.scale-animation {
                 overflow: hidden;
                 cursor: pointer;
                 transition: all 0.35s ease;
-                
+
                 .generated-img {
                   transition: transform 0.35s ease;
                 }
-                
-                &:hover{
-                  .generated-img{
+
+                &:hover {
+                  .generated-img {
                     transform: scale(1.1);
                   }
                 }
@@ -498,14 +506,14 @@ const getImageProcessingTimeText = computed(() => {
               .timer-wrapper {
                 position: absolute;
                 z-index: 9;
-                top: .5rem;
-                right: .5rem;
+                top: 0.5rem;
+                right: 0.5rem;
                 background: #fff;
                 display: flex;
-                padding: .5rem .625rem;
+                padding: 0.5rem 0.625rem;
                 justify-content: center;
                 align-items: center;
-                gap: .25rem;
+                gap: 0.25rem;
                 color: #6c6c6c;
                 text-align: right;
                 font-family: Nunito;
@@ -514,11 +522,11 @@ const getImageProcessingTimeText = computed(() => {
                 font-weight: 500;
                 line-height: 1rem; /* 133.333% */
                 .dots {
-                  gap: .125rem;
+                  gap: 0.125rem;
                   .dot {
                     background: #f9fafb;
-                    height: .125rem;
-                    width: .125rem;
+                    height: 0.125rem;
+                    width: 0.125rem;
                   }
                 }
               }
@@ -550,7 +558,7 @@ const getImageProcessingTimeText = computed(() => {
 .dots {
   display: flex;
   align-items: center;
-  gap: .1875rem;
+  gap: 0.1875rem;
 
   .dot {
     &:not(:last-child) {
