@@ -262,7 +262,7 @@ function handleUploadedFileClicked(file) {
     // height: 100%;
     width: 100%;
     max-width: 56.25rem;
-    gap: 1rem;
+    gap: 2rem;
     padding: 2rem 0;
     // padding-bottom: 2rem;
     flex: 1 0 0;
