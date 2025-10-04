@@ -281,24 +281,26 @@ onMounted(() => {
           :class="{ pause: inProgress, disabled: !inProgress && !modelValue }"
         >
           <template v-if="!inProgress">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="white"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon"
+            >
               <path
-                d="M12.0448 6.87996C11.9181 6.87996 11.7915 6.83329 11.6915 6.73329L7.99813 3.03996L4.30479 6.73329C4.11146 6.92663 3.79146 6.92663 3.59813 6.73329C3.40479 6.53996 3.40479 6.21996 3.59813 6.02663L7.64479 1.97996C7.83813 1.78663 8.15812 1.78663 8.35146 1.97996L12.3981 6.02663C12.5915 6.21996 12.5915 6.53996 12.3981 6.73329C12.3048 6.83329 12.1715 6.87996 12.0448 6.87996Z"
-                fill="#FFEDD5"
-              />
-              <path
-                d="M8 14.1668C7.72667 14.1668 7.5 13.9401 7.5 13.6668V2.44678C7.5 2.17344 7.72667 1.94678 8 1.94678C8.27333 1.94678 8.5 2.17344 8.5 2.44678V13.6668C8.5 13.9401 8.27333 14.1668 8 14.1668Z"
-                fill="#FFEDD5"
-              />
+                d="M8.99992 16V6.41407L5.70696 9.70704C5.31643 10.0976 4.68342 10.0976 4.29289 9.70704C3.90237 9.31652 3.90237 8.6835 4.29289 8.29298L9.29289 3.29298L9.36907 3.22462C9.76184 2.90427 10.3408 2.92686 10.707 3.29298L15.707 8.29298L15.7753 8.36915C16.0957 8.76192 16.0731 9.34092 15.707 9.70704C15.3408 10.0732 14.7618 10.0958 14.3691 9.7754L14.2929 9.70704L10.9999 6.41407V16C10.9999 16.5523 10.5522 17 9.99992 17C9.44764 17 8.99992 16.5523 8.99992 16Z"
+              ></path>
             </svg>
           </template>
           <div class="primary-action-btn-text">
             <template v-if="inProgress">
               <div class="pause-square"></div>
             </template>
-            <template v-else>
+            <!-- <template v-else>
               {{ 'Send' }}
-            </template>
+            </template> -->
           </div>
         </div>
       </div>
@@ -481,11 +483,10 @@ onMounted(() => {
     .right-actions {
       .primary-action-btn {
         display: flex;
-        padding: 0.5rem 0.75rem;
-        padding-right: 0.875rem;
+        padding: 0.5rem;
         align-items: center;
         justify-content: center;
-        gap: 0.25rem;
+        // gap: 0.25rem;
         border-radius: 6.25rem;
         background: var(--blue-500, #3b82f6);
         transition: all 0.25s ease-in;
@@ -517,12 +518,14 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.35s ease;
           .pause-square {
-            width: 0.875rem;
-            height: 0.875rem;
+            width: 0.75rem;
+            height: 0.75rem;
             flex-shrink: 0;
             border-radius: 0.125rem;
             background: var(--white, #fff);
+            transition: all 0.35s ease;
           }
         }
       }
