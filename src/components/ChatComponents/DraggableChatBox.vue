@@ -9,7 +9,7 @@
   >
     <!-- Header with drag handle -->
     <div class="chat-box-header" @mousedown="startDrag">
-      <div class="chat-box-title">Manage AI</div>
+      <div class="chat-box-title">AI</div>
       <div class="close-and-edit-wrapper">
         <OTooltip v-if="!hideTooltip" content="Restart conversation" position="top" :showArrow="false">
           <div class="close-button" @click.stop="handleRestartConversation" @mousedown.stop>
