@@ -39,7 +39,7 @@
       </div>
     </div>
     <!-- Content Area -->
-    <ChatViewWrapper />
+    <ChatViewWrapper class="draggable-chat-box-content-area" />
   </div>
 </template>
 
@@ -367,5 +367,28 @@ onUnmounted(() => {
 .slide-fade-leave-to {
   opacity: 0;
   transform: translateY(-50px);
+}
+</style>
+
+<style lang="scss">
+.draggable-chat-box-content-area {
+  &.chat-component-middle-section-wrapper {
+    .chat-agent-main-wrapper {
+      justify-content: flex-end;
+      .initial-header-wrapper {
+        padding: 0;
+        padding-bottom: 1.5rem;
+      }
+      .chat-messages-view {
+        .main-ai-chat-view-wrapper {
+          padding: 1rem;
+        }
+      }
+      .prompt-input-wrapper {
+        padding: 1rem;
+        padding-top: 0;
+      }
+    }
+  }
 }
 </style>
