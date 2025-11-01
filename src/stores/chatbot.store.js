@@ -4,6 +4,7 @@ import { nextTick } from 'vue';
 export const useChatbotStore = defineStore('chatBotStore', {
   state: () => ({
     isPrimaryTextareaFocused: false,
+    isChatBoxVisible: false,
     currentConversationId: '1243',
     conversationList: [
       {

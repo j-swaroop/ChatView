@@ -3,6 +3,7 @@ import PrimaryInput from '@/components/ChatComponents/PrimaryInput.vue';
 import MainAIChatView from './MainAIChatView.vue';
 import UploadedFilesSection from './UploadedFilesSection.vue';
 import FullScreenImageViewer from './FullScreenImageViewer.vue';
+import RotationAnimation from './RotationAnimation.vue';
 
 import { storeToRefs } from 'pinia';
 import { ref, inject, computed, onMounted } from 'vue';
@@ -149,7 +150,13 @@ function handlePauseResponse() {
       </div>
       <div v-else class="initial-header-wrapper">
         <div class="main-agent-icon">
-          <img :src="appImages['aiAssistantLogo.svg']" class="ai-logo-img" />
+          <RotationAnimation
+            :duration="3"
+            primaryColor="#60a5fa"
+            secondaryColor="#3b82f6"
+            backgroundColor="#dbeafe"
+            class="ai-logo-img"
+          />
         </div>
         <div class="agent-greet-title">Hey Bro!</div>
         <div class="agent-greet-subtitle">What do you want to do today?</div>

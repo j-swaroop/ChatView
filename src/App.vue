@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia';
 import { useCommon } from '@/stores/common.store.js';
 import { useRemIndicator } from '@/composables/remIndicatorComposable';
 import CircularProgressBar from '@/components/sharedComponents/CircularProgressBar.vue';
+import DraggableChatBoxWrapper from './components/ChatComponents/DraggableChatBoxWrapper.vue';
 
 const useCommonStore = useCommon();
 let { commonLoaderState } = storeToRefs(useCommonStore);
@@ -23,6 +24,7 @@ init();
   <div class="app-wrapper">
     <RouterView :key="route.fullPath" />
     <CircularProgressBar v-if="commonLoaderState"></CircularProgressBar>
+    <DraggableChatBoxWrapper />
   </div>
   <div id="remIndicator" ref="remIndicatorRef"></div>
 </template>

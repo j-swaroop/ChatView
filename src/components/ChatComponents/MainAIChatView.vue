@@ -3,6 +3,7 @@ import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 
 import UploadedFilesSection from './UploadedFilesSection.vue';
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
+import RotationAnimation from './RotationAnimation.vue';
 import { useChatbotStore } from '@/stores/chatbot.store';
 
 const chatbotStore = useChatbotStore();
@@ -100,7 +101,7 @@ function handleUploadedFileClicked(file) {
 const copyMessage = (chat) => {
   if (navigator.clipboard && chat && chat?.message) {
     navigator.clipboard.writeText(chat?.message).then(() => {
-      console.log("copied");
+      console.log('copied');
       copiedMessageId.value = chat?._id;
     });
     setTimeout(() => {
@@ -122,7 +123,13 @@ const copyMessage = (chat) => {
         :id="chat._id"
       >
         <div v-if="chat.role === 'assistant'" class="agent-icon">
-          <img :src="appImages['aiAssistantLogo.svg']" />
+          <RotationAnimation
+            :duration="3"
+            primaryColor="#60a5fa"
+            secondaryColor="#3b82f6"
+            backgroundColor="#dbeafe"
+            class="ai-logo-img"
+          />
         </div>
         <div class="message-content">
           <div v-if="chat?.identifying || chat?.thinking" class="thinking-text-wrapper">
@@ -249,17 +256,45 @@ const copyMessage = (chat) => {
           <div v-if="true" class="message-actions">
             <div @click="copyMessage(chat)" class="copy-message">
               <!-- Copy Success SVG -->
-              <svg v-if="copiedMessageId === chat?._id" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="copy-img copied-svg">
-                <path d="M13.75 2.5H6.25C5.55964 2.5 5 3.05964 5 3.75V5H3.75C3.05964 5 2.5 5.55964 2.5 6.25V16.25C2.5 16.9404 3.05964 17.5 3.75 17.5H11.25C11.9404 17.5 12.5 16.9404 12.5 16.25V15H13.75C14.4404 15 15 14.4404 15 13.75V3.75C15 3.05964 14.4404 2.5 13.75 2.5ZM11.25 16.25H3.75V6.25H5V13.75C5 14.4404 5.55964 15 6.25 15H11.25V16.25ZM13.75 13.75H6.25V3.75H13.75V13.75Z" fill="#10B981"/>
-                <circle cx="9.5" cy="9.5" r="3" fill="#10B981"/>
-                <path d="M8.125 9.5L9.0625 10.4375L11.25 8.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg
+                v-if="copiedMessageId === chat?._id"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="copy-img copied-svg"
+              >
+                <path
+                  d="M13.75 2.5H6.25C5.55964 2.5 5 3.05964 5 3.75V5H3.75C3.05964 5 2.5 5.55964 2.5 6.25V16.25C2.5 16.9404 3.05964 17.5 3.75 17.5H11.25C11.9404 17.5 12.5 16.9404 12.5 16.25V15H13.75C14.4404 15 15 14.4404 15 13.75V3.75C15 3.05964 14.4404 2.5 13.75 2.5ZM11.25 16.25H3.75V6.25H5V13.75C5 14.4404 5.55964 15 6.25 15H11.25V16.25ZM13.75 13.75H6.25V3.75H13.75V13.75Z"
+                  fill="#10B981"
+                />
+                <circle cx="9.5" cy="9.5" r="3" fill="#10B981" />
+                <path
+                  d="M8.125 9.5L9.0625 10.4375L11.25 8.25"
+                  stroke="white"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
               <!-- Default Copy SVG -->
-              <svg v-else width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="copy-img">
-                <path d="M13.75 2.5H6.25C5.55964 2.5 5 3.05964 5 3.75V5H3.75C3.05964 5 2.5 5.55964 2.5 6.25V16.25C2.5 16.9404 3.05964 17.5 3.75 17.5H11.25C11.9404 17.5 12.5 16.9404 12.5 16.25V15H13.75C14.4404 15 15 14.4404 15 13.75V3.75C15 3.05964 14.4404 2.5 13.75 2.5ZM11.25 16.25H3.75V6.25H5V13.75C5 14.4404 5.55964 15 6.25 15H11.25V16.25ZM13.75 13.75H6.25V3.75H13.75V13.75Z" fill="#6B7280"/>
-                <path d="M7.5 6.25H12.5V7.5H7.5V6.25Z" fill="#6B7280"/>
-                <path d="M7.5 8.75H12.5V10H7.5V8.75Z" fill="#6B7280"/>
-                <path d="M7.5 11.25H10V12.5H7.5V11.25Z" fill="#6B7280"/>
+              <svg
+                v-else
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="copy-img"
+              >
+                <path
+                  d="M13.75 2.5H6.25C5.55964 2.5 5 3.05964 5 3.75V5H3.75C3.05964 5 2.5 5.55964 2.5 6.25V16.25C2.5 16.9404 3.05964 17.5 3.75 17.5H11.25C11.9404 17.5 12.5 16.9404 12.5 16.25V15H13.75C14.4404 15 15 14.4404 15 13.75V3.75C15 3.05964 14.4404 2.5 13.75 2.5ZM11.25 16.25H3.75V6.25H5V13.75C5 14.4404 5.55964 15 6.25 15H11.25V16.25ZM13.75 13.75H6.25V3.75H13.75V13.75Z"
+                  fill="#6B7280"
+                />
+                <path d="M7.5 6.25H12.5V7.5H7.5V6.25Z" fill="#6B7280" />
+                <path d="M7.5 8.75H12.5V10H7.5V8.75Z" fill="#6B7280" />
+                <path d="M7.5 11.25H10V12.5H7.5V11.25Z" fill="#6B7280" />
               </svg>
             </div>
           </div>
@@ -311,11 +346,6 @@ const copyMessage = (chat) => {
         display: flex;
         flex-flow: row nowrap;
         place-items: center;
-        img {
-          width: 2.5rem;
-          height: 2.5rem;
-          flex-shrink: 0;
-        }
       }
       &.user {
         justify-content: flex-end;
@@ -615,10 +645,10 @@ const copyMessage = (chat) => {
             align-items: center;
             flex-shrink: 0;
             cursor: pointer;
-            svg{
+            svg {
               height: 100%;
               width: 100%;
-              path{
+              path {
                 transition: all 0.35s ease;
               }
             }
@@ -630,7 +660,7 @@ const copyMessage = (chat) => {
               }
               .copied-svg {
                 path {
-                  fill: #10B981;
+                  fill: #10b981;
                 }
               }
             }
@@ -736,6 +766,20 @@ const copyMessage = (chat) => {
   }
   100% {
     background-position: -400% center;
+  }
+}
+</style>
+
+<style lang="scss">
+.main-ai-chat-view-wrapper {
+  .ai-logo-img {
+    &.rotation-container {
+      padding: 0.625rem 0;
+      .rotation-element {
+        height: 1.5rem;
+        width: 1.5rem;
+      }
+    }
   }
 }
 </style>
