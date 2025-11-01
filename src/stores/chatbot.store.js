@@ -145,10 +145,11 @@ export const useChatbotStore = defineStore('chatBotStore', {
         identifying: false,
         finding: false,
         generatedImages: [],
-        documentToDownload: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+        documentToDownload: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       },
     ],
     // conversationList: [],
+    showAskTooltip: false,
     currentStreamAbortController: null,
     currentSelectedImageForFullView: '',
     hideFullPageImageViewer: false,
@@ -244,14 +245,15 @@ export const useChatbotStore = defineStore('chatBotStore', {
         fileSummaries.join('\n')
       );
     },
-    async startAiAgentResponseStreaming(request = { conversation_id, message, uploadedFiles }) {
-      const { conversation_id, message, uploadedFiles } = request;
+    async startAiAgentResponseStreaming(request = {}) {
+      const { conversation_id, message, uploadedFiles, referenceText } = request;
 
       this.conversationList.push({
         _id: Date.now(),
         role: 'user',
         message: message,
         uploadedFiles: uploadedFiles,
+        ...(referenceText && { referenceText }),
       });
 
       console.log(this.conversationList, 'conversations array');

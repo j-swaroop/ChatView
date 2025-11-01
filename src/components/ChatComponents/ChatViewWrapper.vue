@@ -24,6 +24,7 @@ const { convertAndResizeImageToBase64, startAiAgentResponseStreaming, openFullSc
 
 const messageInput = ref('');
 const uploadedFiles = ref([]);
+const selectedReferringText = ref('');
 const appImages = inject('appImages');
 
 const promptInputPlaceholder = computed(() => {
@@ -116,12 +117,14 @@ function handleSubmitMessage(message) {
     conversation_id: currentConversationId.value,
     message: msg,
     uploadedFiles: filesToSend,
+    referenceText: selectedReferringText.value,
   });
 
   console.log('Message submitted:', msg, 'Files:', filesToSend);
 
   uploadedFiles.value = [];
   messageInput.value = '';
+  selectedReferringText.value = '';
 }
 
 function handlePauseResponse() {
@@ -129,6 +132,10 @@ function handlePauseResponse() {
   const lastMessage = conversationList.value[conversationList.value.length - 1];
   lastMessage.isGenerating = false;
   lastMessage.thinking = false;
+}
+
+function handleAskSelection(content) {
+  selectedReferringText.value = content;
 }
 </script>
 
@@ -146,7 +153,7 @@ function handlePauseResponse() {
     </div>
     <div class="chat-agent-main-wrapper">
       <div v-if="conversationList?.length" class="chat-messages-view">
-        <MainAIChatView :chats="conversationList" />
+        <MainAIChatView :chats="conversationList" @askSelection="handleAskSelection" />
       </div>
       <div v-else class="initial-header-wrapper">
         <div class="main-agent-icon">
@@ -185,9 +192,11 @@ function handlePauseResponse() {
           :hideSuggestionsDropdown="conversationList?.length"
           :inProgress="isStreamingGenerationInProgress"
           :short="conversationList.length"
+          :referred-text="selectedReferringText"
           @files-selected="handleFilesSelected"
           @submit:message="handleSubmitMessage"
           @pause-response="handlePauseResponse"
+          @remove-reference="selectedReferringText = ''"
         />
       </div>
     </div>

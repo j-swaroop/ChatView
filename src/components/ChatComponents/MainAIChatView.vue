@@ -1,5 +1,6 @@
 <script setup>
-import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, inject } from 'vue';
+import { ref, watch, nextTick, toRefs, computed, onBeforeUnmount, onMounted, onUnmounted, inject } from 'vue';
+import { storeToRefs } from 'pinia';
 import UploadedFilesSection from './UploadedFilesSection.vue';
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
@@ -9,6 +10,7 @@ import { useChatbotStore } from '@/stores/chatbot.store';
 const chatbotStore = useChatbotStore();
 
 const { downloadImage, openFullScreenImageViewer } = chatbotStore;
+const { showAskTooltip } = storeToRefs(chatbotStore);
 
 const props = defineProps({
   chats: {
@@ -17,6 +19,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['askSelection']);
+
 const appImages = inject('appImages');
 
 const { chats } = toRefs(props);
@@ -24,6 +28,9 @@ const { chats } = toRefs(props);
 const chatWrapperRef = ref(null);
 const lastMessageRef = ref(null);
 const copiedMessageId = ref(null);
+
+// Store handler reference for cleanup
+let mousedownHandler = null;
 
 //--------------------------------------------------------------------------------------------
 const elapsed = ref(0); // Accurate in decimals
@@ -70,6 +77,24 @@ watch(
   }
 );
 
+onMounted(() => {
+  window.addEventListener('mouseup', updateTooltip);
+  mousedownHandler = (e) => {
+    if (!(e.target && e.target.closest('.ask-tooltip'))) {
+      clearTooltip();
+      showAskTooltip.value = false;
+    }
+  };
+  window.addEventListener('mousedown', mousedownHandler);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('mouseup', updateTooltip);
+  if (mousedownHandler) {
+    window.removeEventListener('mousedown', mousedownHandler);
+  }
+});
+
 onBeforeUnmount(() => {
   clearInterval(intervalId);
 });
@@ -109,10 +134,66 @@ const copyMessage = (chat) => {
     }, 1000);
   }
 };
+
+// Tooltip logic
+const tooltipPosition = ref({ top: 0, left: 0 });
+const selectedText = ref('');
+
+function updateTooltip() {
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed) {
+    clearTooltip();
+    return;
+  }
+
+  const range = selection.getRangeAt(0);
+
+  // Get bounding rect of the entire selection
+  const boundingRect = range.getBoundingClientRect();
+  if (!boundingRect || boundingRect.width === 0) {
+    clearTooltip();
+    return;
+  }
+
+  // Save selected text
+  selectedText.value = selection.toString();
+
+  // Position tooltip centered above the selection
+  tooltipPosition.value = {
+    top: boundingRect.top + window.scrollY - 45,
+    left: boundingRect.left + boundingRect.width / 2 + window.scrollX,
+  };
+
+  showAskTooltip.value = true;
+}
+
+function clearTooltip() {
+  showAskTooltip.value = false;
+}
+
+function handleAskClick() {
+  console.log('ask clicked');
+  emit('askSelection', selectedText.value);
+  clearTooltip();
+  showAskTooltip.value = false;
+  // Clear the selection to prevent tooltip from showing again immediately
+  if (window.getSelection) {
+    window.getSelection().removeAllRanges();
+  }
+}
+
+function handleChatWrapperScroll() {
+  updateTooltip();
+}
+
+function editBtnClicked(url) {
+  // Placeholder for edit functionality
+  console.log('Edit clicked for:', url);
+}
 </script>
 
 <template>
-  <div class="main-ai-chat-view-wrapper" ref="chatWrapperRef" :class="{ bottomSpacing: chats.length > 2 }">
+  <div class="main-ai-chat-view-wrapper" ref="chatWrapperRef" :class="{ bottomSpacing: chats.length > 2 }" @scroll="handleChatWrapperScroll">
     <div class="messages-container">
       <div
         v-for="(chat, index) in chats"
@@ -151,6 +232,21 @@ const copyMessage = (chat) => {
             />
           </div>
 
+          <div v-if="chat?.referenceText" class="ask-reference-area">
+            <div class="reference-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M9.84115 2.88151H5.17448C3.32531 2.88151 1.82031 4.38651 1.82031 6.23568C1.82031 8.08484 3.32531 9.58984 5.17448 9.58984H11.5911C11.8303 9.58984 12.0286 9.39151 12.0286 9.15234C12.0286 8.91318 11.8303 8.71484 11.5911 8.71484H5.17448C3.80948 8.71484 2.69531 7.60068 2.69531 6.23568C2.69531 4.87068 3.80948 3.75651 5.17448 3.75651H9.84115C10.0803 3.75651 10.2786 3.55818 10.2786 3.31901C10.2786 3.07984 10.0861 2.88151 9.84115 2.88151Z"
+                  fill="#4B5563"
+                />
+                <path
+                  d="M10.2485 7.25698C10.1377 7.25698 10.0269 7.29781 9.93938 7.38531C9.77021 7.55448 9.77021 7.83448 9.93938 8.00365L11.1235 9.18781L9.93938 10.372C9.77021 10.5411 9.77021 10.8211 9.93938 10.9903C10.1085 11.1595 10.3885 11.1595 10.5577 10.9903L12.051 9.49698C12.2202 9.32781 12.2202 9.04781 12.051 8.87865L10.5577 7.38531C10.4702 7.29781 10.3594 7.25698 10.2485 7.25698Z"
+                  fill="#4B5563"
+                />
+              </svg>
+            </div>
+            <div class="reference-text">{{ chat?.referenceText }}</div>
+          </div>
           <div v-if="chat?.generatedImages?.length" class="generated-images-wrapper">
             <div class="generated-images">
               <div
@@ -300,6 +396,28 @@ const copyMessage = (chat) => {
           </div>
         </div>
       </div>
+    </div>
+    <div
+      v-show="showAskTooltip"
+      class="ask-tooltip"
+      :style="{
+        top: tooltipPosition.top + 'px',
+        left: tooltipPosition.left + 'px',
+        transform: 'translateX(-50%)',
+      }"
+      @click="handleAskClick"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+        <path
+          d="M9.84115 3.38151H5.17448C3.32531 3.38151 1.82031 4.88651 1.82031 6.73568C1.82031 8.58484 3.32531 10.0898 5.17448 10.0898H11.5911C11.8303 10.0898 12.0286 9.89151 12.0286 9.65234C12.0286 9.41318 11.8303 9.21484 11.5911 9.21484H5.17448C3.80948 9.21484 2.69531 8.10068 2.69531 6.73568C2.69531 5.37068 3.80948 4.25651 5.17448 4.25651H9.84115C10.0803 4.25651 10.2786 4.05818 10.2786 3.81901C10.2786 3.57984 10.0861 3.38151 9.84115 3.38151Z"
+          fill="#4B5563"
+        />
+        <path
+          d="M10.2485 7.75698C10.1377 7.75698 10.0269 7.79781 9.93938 7.88531C9.77021 8.05448 9.77021 8.33448 9.93938 8.50365L11.1235 9.68781L9.93938 10.872C9.77021 11.0411 9.77021 11.3211 9.93938 11.4903C10.1085 11.6595 10.3885 11.6595 10.5577 11.4903L12.051 9.99698C12.2202 9.82781 12.2202 9.54781 12.051 9.37865L10.5577 7.88531C10.4702 7.79781 10.3594 7.75698 10.2485 7.75698Z"
+          fill="#4B5563"
+        />
+      </svg>
+      Ask
     </div>
   </div>
 </template>
@@ -673,6 +791,37 @@ const copyMessage = (chat) => {
           }
         }
 
+        .ask-reference-area {
+          border-radius: 0.5rem;
+          border: 1px solid var(--gray-200, #e5e7eb);
+          background: rgba(255, 255, 255, 0.9);
+          display: flex;
+          width: 100%;
+          padding: 0.375rem 0.75rem;
+          margin-bottom: 0.5rem;
+          justify-content: flex-start;
+          align-items: flex-start;
+          gap: 1rem;
+          .reference-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+          }
+          .reference-text {
+            flex: 1;
+            color: var(--gray-600, #4b5563);
+            font-family: Nunito;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            display: flex;
+            align-items: center;
+            word-break: break-word;
+          }
+        }
         .images-user-messages-block-wrapper {
           display: flex;
           flex-flow: row nowrap;
@@ -766,6 +915,47 @@ const copyMessage = (chat) => {
   }
   100% {
     background-position: -400% center;
+  }
+}
+
+.ask-tooltip {
+  position: fixed;
+  display: inline-flex;
+  height: 2.1875rem;
+  padding: 0 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+  z-index: 1000;
+  border-radius: 1.5rem;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  background: var(--white, #fff);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  color: var(--gray-600, #4b5563);
+  font-family: Nunito;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  @keyframes askBtnAnimation {
+    from {
+      transform: translateX(-50%) translateY(50%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  }
+  animation: askBtnAnimation 0.5s ease;
+  &:hover {
+    border-radius: 1.5rem;
+    border: 1px solid var(--gray-300, #d1d5db);
+    background: var(--gray-50, #f9fafb);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 }
 </style>

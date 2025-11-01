@@ -26,6 +26,10 @@ const props = defineProps({
     type: [Boolean, String, Number],
     default: false,
   },
+  referredText: {
+    type: String,
+    default: '',
+  },
 });
 
 const emit = defineEmits([
@@ -35,6 +39,7 @@ const emit = defineEmits([
   'files-selected',
   'submit:message',
   'pause-response',
+  'removeReference',
 ]);
 
 const isTyping = ref(false);
@@ -152,6 +157,10 @@ function handleSuggestionDropdownItemClick(suggestion) {
   autoResizeTextarea();
 }
 
+function removeReference() {
+  emit('removeReference');
+}
+
 // --- global typing capture ---
 function handleGlobalTyping(e) {
   // Ignore if user is holding control/meta/alt etc.
@@ -251,6 +260,28 @@ onMounted(() => {
       animateBorder: inProgress,
     }"
   >
+    <transition name="heightFade">
+      <div v-if="referredText" class="ask-reference-area">
+        <div class="reference-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path
+              d="M9.84115 2.88151H5.17448C3.32531 2.88151 1.82031 4.38651 1.82031 6.23568C1.82031 8.08484 3.32531 9.58984 5.17448 9.58984H11.5911C11.8303 9.58984 12.0286 9.39151 12.0286 9.15234C12.0286 8.91318 11.8303 8.71484 11.5911 8.71484H5.17448C3.80948 8.71484 2.69531 7.60068 2.69531 6.23568C2.69531 4.87068 3.80948 3.75651 5.17448 3.75651H9.84115C10.0803 3.75651 10.2786 3.55818 10.2786 3.31901C10.2786 3.07984 10.0861 2.88151 9.84115 2.88151Z"
+              fill="#4B5563"
+            />
+            <path
+              d="M10.2485 7.25698C10.1377 7.25698 10.0269 7.29781 9.93938 7.38531C9.77021 7.55448 9.77021 7.83448 9.93938 8.00365L11.1235 9.18781L9.93938 10.372C9.77021 10.5411 9.77021 10.8211 9.93938 10.9903C10.1085 11.1595 10.3885 11.1595 10.5577 10.9903L12.051 9.49698C12.2202 9.32781 12.2202 9.04781 12.051 8.87865L10.5577 7.38531C10.4702 7.29781 10.3594 7.25698 10.2485 7.25698Z"
+              fill="#4B5563"
+            />
+          </svg>
+        </div>
+        <div class="reference-text">{{ referredText }}</div>
+        <div @click="removeReference" class="remove-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 12L12 4M4 4L12 12" stroke="#4B5563" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+    </transition>
     <div class="prompt-input-area">
       <textarea
         :value="modelValue"
@@ -660,5 +691,60 @@ onMounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.heightFade-enter-active,
+.heightFade-leave-active {
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.heightFade-enter-from,
+.heightFade-leave-to {
+  opacity: 0;
+  height: 0;
+}
+
+.ask-reference-area {
+  border-radius: 0.5rem;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 1rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  .reference-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  .remove-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    transition: all 0.25s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  .reference-text {
+    flex: 1;
+    color: var(--gray-600, #4b5563);
+    font-family: Nunito;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+  }
 }
 </style>
