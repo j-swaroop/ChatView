@@ -52,10 +52,8 @@ async function handleFilesSelected(files) {
   // Step 1: convert/resize images before preparing previews
   const processedFiles = await Promise.all(
     filesArray.map(async (file) => {
-      if (file.type.startsWith("image/")) {
-        const { base64, originalName } = await convertAndResizeImageToBase64(
-          file
-        );
+      if (file.type.startsWith('image/')) {
+        const { base64, originalName } = await convertAndResizeImageToBase64(file);
         return { file, base64, isImage: true, originalName };
       }
       return { file, base64: null, isImage: false, originalName: file.name };
@@ -66,7 +64,7 @@ async function handleFilesSelected(files) {
   const previews = processedFiles.map(({ file, base64, isImage }) => ({
     _id: crypto.randomUUID(),
     preview: base64,
-    type: isImage ? "png" : file.type.split("/")[1] || "unknown",
+    type: isImage ? 'png' : file.type.split('/')[1] || 'unknown',
     fileType: file.type,
     url: null,
     file,
@@ -102,7 +100,7 @@ function handleRemoveUploadedFile(index) {
 }
 
 function handleUploadedFileClicked(file) {
-  if (file.fileType.startsWith("image/")) {
+  if (file.fileType.startsWith('image/')) {
     const fileToShow = file.url || file.preview;
     openFullScreenImageViewer(fileToShow);
   } else {
@@ -136,6 +134,15 @@ function handlePauseResponse() {
 <template>
   <div class="chat-component-middle-section-wrapper">
     <!-- :class="{ inConversation: conversationList?.length }" -->
+    <div
+      class="animation-bg"
+      :class="{
+        animate: conversationList.some((chat) => chat?.isGenerating) || isStreamingGenerationInProgress,
+        long: conversationList.length,
+      }"
+    >
+      <div class="animation-container"></div>
+    </div>
     <div class="chat-agent-main-wrapper">
       <div v-if="conversationList?.length" class="chat-messages-view">
         <MainAIChatView :chats="conversationList" />
@@ -149,7 +156,6 @@ function handlePauseResponse() {
       </div>
 
       <div class="prompt-input-wrapper">
-
         <transition name="uploaded-files-transition">
           <div
             class="upload-file-section-wrapper"
@@ -199,6 +205,55 @@ function handlePauseResponse() {
   // max-width: 56.25rem;
   transition: all 0.5s ease;
   overflow: auto;
+  position: relative;
+  .animation-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    .animation-container {
+      position: absolute;
+      bottom: 0;
+      background: linear-gradient(to right, #93c5fd, #bfdbfe, #ddd6fe);
+      filter: blur(5rem);
+      height: 4rem;
+      width: 100%;
+      transform: translateY(5rem);
+      transition: all 1s ease;
+      background-size: 200% 200%; /* make gradient larger for smooth motion */
+      background-position: center;
+    }
+    &.long {
+      .animation-container {
+        height: 5.5rem;
+      }
+    }
+    &.animate {
+      .animation-container {
+        animation: breathingAnimation 5s ease-in-out infinite;
+        filter: blur(100px);
+      }
+    }
+    @keyframes breathingAnimation {
+      from {
+        height: 8.4375rem;
+        background-position: 0% 50%;
+        transform: translateY(5rem) translateX(-15%) scaleY(0.8);
+        border-radius: 50% 30% 60% 40%;
+      }
+      to {
+        height: 16.4375rem;
+        background-position: 100% 50%;
+        transform: translateY(3rem) translateX(15%) scaleY(1.2);
+        border-radius: 40% 60% 30% 50%;
+      }
+    }
+  }
 }
 .chat-agent-main-wrapper {
   display: flex;
