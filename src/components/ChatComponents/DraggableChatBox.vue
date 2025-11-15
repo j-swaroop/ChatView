@@ -50,10 +50,10 @@ import ChatViewWrapper from './ChatViewWrapper.vue';
 import OTooltip from './OTooltip.vue';
 
 import { storeToRefs } from 'pinia';
-import { useChatbotStore } from '@/stores/chatbot.store';
+import { useChatAgentStore } from '@/stores/chatAgent.store';
 
-const chatbotStore = useChatbotStore();
-const { conversationList } = storeToRefs(chatbotStore);
+const chatAgentStore = useChatAgentStore();
+const { conversationList } = storeToRefs(chatAgentStore);
 
 // Props
 const props = defineProps({

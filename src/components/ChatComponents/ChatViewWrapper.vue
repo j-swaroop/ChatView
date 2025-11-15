@@ -7,9 +7,9 @@ import RotationAnimation from './RotationAnimation.vue';
 
 import { storeToRefs } from 'pinia';
 import { ref, inject, computed, onMounted } from 'vue';
-import { useChatbotStore } from '@/stores/chatbot.store';
+import { useChatAgentStore } from '@/stores/chatAgent.store';
 
-const chatbotStore = useChatbotStore();
+const chatAgentStore = useChatAgentStore();
 
 const {
   currentConversationId,
@@ -17,10 +17,10 @@ const {
   isStreamingGenerationInProgress,
   currentStreamAbortController,
   currentSelectedImageForFullView,
-} = storeToRefs(chatbotStore);
+} = storeToRefs(chatAgentStore);
 
 const { convertAndResizeImageToBase64, startAiAgentResponseStreaming, openFullScreenImageViewer, downloadImage } =
-  chatbotStore;
+  chatAgentStore;
 
 const messageInput = ref('');
 const uploadedFiles = ref([]);

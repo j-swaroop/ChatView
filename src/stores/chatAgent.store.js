@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { nextTick } from 'vue';
 
-export const useChatbotStore = defineStore('chatBotStore', {
+export const useChatAgentStore = defineStore('chatAgentStore', {
   state: () => ({
     isPrimaryTextareaFocused: false,
     isChatBoxVisible: false,

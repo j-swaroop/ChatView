@@ -5,12 +5,12 @@ import UploadedFilesSection from './UploadedFilesSection.vue';
 import CustomMarkdown from '../MarkdownComponent/CustomMarkdown.vue';
 import SentMessageMarkdown from '../MarkdownComponent/SentMessageMarkdown.vue';
 import RotationAnimation from './RotationAnimation.vue';
-import { useChatbotStore } from '@/stores/chatbot.store';
+import { useChatAgentStore } from '@/stores/chatAgent.store';
 
-const chatbotStore = useChatbotStore();
+const chatAgentStore = useChatAgentStore();
 
-const { downloadImage, openFullScreenImageViewer } = chatbotStore;
-const { showAskTooltip } = storeToRefs(chatbotStore);
+const { downloadImage, openFullScreenImageViewer } = chatAgentStore;
+const { showAskTooltip } = storeToRefs(chatAgentStore);
 
 const props = defineProps({
   chats: {
@@ -514,6 +514,7 @@ function editBtnClicked(url) {
           justify-content: flex-start;
           margin-top: 0.5rem;
           padding-left: 0.5rem;
+          padding-top: .25rem;
 
           .thinking-text {
             background: linear-gradient(

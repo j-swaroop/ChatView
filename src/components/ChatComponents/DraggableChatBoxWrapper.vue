@@ -19,13 +19,13 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useChatbotStore } from '@/stores/chatbot.store';
+import { useChatAgentStore } from '@/stores/chatAgent.store';
 
 import DraggableChatBox from './DraggableChatBox.vue';
 import RotationAnimation from './RotationAnimation.vue';
 
-const chatbotStore = useChatbotStore();
-const { isChatBoxVisible } = storeToRefs(chatbotStore);
+const chatAgentStore = useChatAgentStore();
+const { isChatBoxVisible } = storeToRefs(chatAgentStore);
 
 const isIconFading = ref(false);
 const iconWrapper = ref(null);
